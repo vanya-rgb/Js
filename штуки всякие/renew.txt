@@ -1,8 +1,0 @@
-//обновление раз в минуту
-console.log('Before job instantiation');
-const job = new CronJob('0 */1 * * * *', function() {
-	parse()
-    console.log('Something happend');
-});
-console.log('After job instantiation');
-job.start();
