@@ -1,0 +1,42 @@
+main.container-fluid {margin:0;padding:0;}
+
+.nightmode {
+ background-color:#121212;
+ background-image: linear-gradient(to right, #274046, #E6DADA);
+ color:#fff;
+ text-shadow:1px 1px 1px black;
+}
+.daymode {
+ background-color: #87ceeb;
+ background-image: linear-gradient(to bottom left, #87ceeb 0%,#fff 100%);
+ color:#333;
+ text-shadow:1px 1px 10px white;
+}
+.clocktext {
+ display:block;
+ margin:0;
+ padding:1px 0 0 0;
+ width:100%;
+ text-align:right;
+ line-height:1.2;
+ white-space:nowrap;
+}
+#date {
+ font-size: 20px;
+ padding-top:5px;
+}
+#time {
+ font-size: 25px;
+ margin:1px 0 0 0;
+}
+#time span {
+ display:inline-block;
+ padding: 0;
+ vertical-align: baseline;
+ text-align:center;
+ /* width: 2vw; */
+ margin:0 0 0 0.5em;
+ font-size: 17px;
+ line-height:1;
+ white-space:normal;
+}

@@ -1,0 +1,13 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "blog.css";
+@import "headers.css";
+/* @import "sidebars.css"; */
+
+h1 {
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    font-size: 3em;
+    font-family:Georgia, 'Times New Roman', Times, serif
+}
+
