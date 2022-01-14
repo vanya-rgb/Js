@@ -1,0 +1,16 @@
+{
+  "name": "customer_creation_form",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.33",
+    "@vuelidate/validators": "^2.0.0-alpha.26",
+    "vue": "^2.6.14"
+  }
+}
