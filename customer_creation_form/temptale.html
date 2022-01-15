@@ -1,76 +1,18 @@
-<!-- Begin of area that is impacted by VueJS -->
-
-        <form @submit.prevent="someAction()">
-          <div>
-            <!--
-              Ошибка в поле будет отображена сразу после начала ввода в него данных
-      
-              data-vv-as - атрибут для кастомизации названия поля в строчке с ошибкой
-              name - название поля внутри объекта валидатора
-            -->
-            <input
-              type="text"
-              v-model="passportData"
-              v-validate="{ required: true, regex: /^\d{4} \d{6}$/ }"
-              data-vv-as="серия и номер паспорта"
-              name="passport_data"
-            >
-            <span v-if="errors.has('passport_data')">
-              {{ errors.first('passport_data') }}
-            </span>
-          </div>
-      
-          <div>
-            <!--
-              По дефолту все ошибки отобразятся как только вы начнете вводить данные.
-              Для изменения этого поведения используйте v-model-модификатор lazy
-              или флаги валидации внутри fields.passport_date
-      
-              Флаг invalid означает то, что данные в поле неправильные
-              Флаг touched означает, что поле ввода создало событие blur
-            -->
-            <input
-              type="text"
-              v-model.lazy="passportDate"
-              v-validate="{ required: true, date_format: 'dd.MM.yyyy' }"
-              data-vv-as="дата выдачи паспорта"
-              name="passport_date"
-            >
-            <span 
-              v-if="fields.passport_date 
-                && fields.passport_date.touched 
-                && fields.passport_date.invalid"
-            >
-              {{ errors.first('passport_date') }}
-            </span>
-          </div>
-      
-          <div>
-            <!--
-              Если хотите отобразить сразу все ошибки поля,
-              то используйте модификатор continues и метод errors.collect()
-            -->
-            <input
-              type="text"
-              v-model="name"
-              v-validate.continues="{ required: true, alpha: true, max: 10 }"
-              data-vv-as="имя"
-              name="name"
-            >
-            <span
-              v-for="error in errors.collect('name')"
-              :key="error"
-            >
-              {{ error }}
-            </span>
-          </div>
-      
-          <button 
-            type="submit"
-            :disabled="!isFormValid"
-          >
-            Отправить форму
-          </button>
-        </form>
-      
-      <script src="./validators.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="action_page.html">
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="fname" value="John"><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname" name="lname" value="Doe"><br><br>
+    <input type="submit" value="Submit">
+  </form> 
+</body>
+</html>

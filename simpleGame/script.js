@@ -5,6 +5,7 @@ var $result = document.querySelector('#result')
 var $timeHeader = document.querySelector('#time_header')
 var $resultHeader = document.querySelector('#result-header')
 var $gameTime = document.querySelector('#game-time')
+var $box = document.querySelector('.box')
 
 var score = 0
 var isGameStarted = false
@@ -12,7 +13,7 @@ var colors = ['#fc466b', '#fdbb2d', '#22c1c3', '#eeaeca', '#94bbe9', '#fd1d1d']
 
 
 $start.addEventListener('click', startGame)
-$game.addEventListener('click', handleBoxClick)
+$box.addEventListener('click', handleBoxClick)
 $gameTime.addEventListener('input', setGameTime)
 
 function show($el){
@@ -23,6 +24,10 @@ function hide($el){
     $el.classList.add('hide')
 }
 
+function unhide($el){
+    $el.classList.remove('hide')
+}
+
 function startGame(){
     score = 0
     setGameTime()
@@ -30,6 +35,7 @@ function startGame(){
     
     $game.style.backgroundColor = '#fff'
     hide($start)
+    unhide($box)
     isGameStarted = true
 
 
@@ -64,7 +70,7 @@ function endGame(){
     isGameStarted = false
     setGameScore()
     show($start)
-    $game.innerHTML = ''
+    hide($box)
     $game.style.backgroundColor = '#ccc'
     hide($timeHeader)
     show($resultHeader)
@@ -84,15 +90,14 @@ function handleBoxClick(event){
 
 function renderBox(){
     
-    $game.innerHTML = ''
-    var box = document.createElement('div')
+    var box = document.querySelector('.box')
     var boxSize = getRandom(30, 100)
     var gameSize = $game.getBoundingClientRect()
     var maxTop = gameSize.height - boxSize
     var maxLeft = gameSize.width - boxSize
     var randomColorIndex = getRandom(0, colors.length-1)
 
-    console.log(gameSize)
+    
 
     box.style.height = box.style.width = boxSize + 'px'
     box.style.position = 'absolute'
@@ -102,7 +107,7 @@ function renderBox(){
     box.style.cursor = 'pointer' 
     box.setAttribute('data-box', 'true')
 
-    $game.insertAdjacentElement('afterbegin', box)
+    
 }
 
 function getRandom(min, max){
