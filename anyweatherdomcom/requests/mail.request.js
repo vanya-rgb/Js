@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
-const translator = require('../tranlator')
+const translator = require('../detranslator')
 
 module.exports =  async function(city='') {
 

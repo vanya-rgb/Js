@@ -28,7 +28,7 @@ connection.connect(function(err){
     }
  });
 
-const host = '192.168.100.151';
+const host = 'localhost';
 const port = 3000;
 
 const app = express();
