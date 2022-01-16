@@ -7,6 +7,8 @@
     "dev": "npx webpack --mode development",
     "start": "nodemon index",
     "prod": "node index",
+    "infinity": "pm2 start index.js --watch",
+    "stop infinity" : "pm2 stop index.js",
     "debag": "node inspect --inspect=192.168.1.80 index.js"
   },
   "author": "Lysikov Ivan",

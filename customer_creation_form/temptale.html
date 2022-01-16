@@ -1,18 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Обработка формы</title>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="myscript.js"></script>
+<style type="text/CSS">
+body {font-size: 15px; font-family:arial; }
+textarea {border-style: none; background: #cacaca;
+color: #6d6d6d; resize: none;width: 290px; }
+input, button {border-style: none; background:
+#cacaca; height: 25px;}
+form {margin: 0 auto; text-align: right; width:
+430px; border: 2px solid grey; padding: 10px; }
+select {border-style: none; background: #cacaca;
+width: 290px; }
+form br {clear:both; margin-bottom: 20px; }
+#m, #w {padding-left: 108px; padding-right: 7px; }
+.radio, .check, label {float: left;}
+#dont {margin-right: 9px;}
+.hobby {padding-left: 21px; padding-right: 4px; }
+</style>
 </head>
 <body>
-  <form action="action_page.html">
-    <label for="fname">First name:</label><br>
-    <input type="text" id="fname" name="fname" value="John"><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" id="lname" name="lname" value="Doe"><br><br>
-    <input type="submit" value="Submit">
-  </form> 
+    <h3>Форма регистрации пользователя</h3>
+    <form id="registration">
+        <label>Ваше имя:</label>
+        <input type="text" size="31" id="name" name="Ваше имя" maxlength="15"/><br><br>
+        <label>Пароль:</label>
+        <input type="password" size="31"id="password"  name="Пароль" maxlength="15"/>
+        <br />
+        <label>Возраст:</label>
+        <input type="text" size="31" id="age" name="Возраст" maxlength="15"/>
+        <br />
+        <label>Пол:</label>
+        <label id="m"> Мужской</label>
+        <input type="radio" class="radio" name="myradio"/>
+        <label id="w">Женский</label>
+        <input type="radio" class="radio" name="myradio"/>
+        <br />
+        <label>Ваши увлечения:</label>
+        <label class="hobby">Музыка</label><input type="checkbox" class="check"/>   
+        <label class="hobby">Видео</label><input  type="checkbox" class="check"/>
+        <label class="hobby">Рисование</label><input type="checkbox" class="check"/>
+        <br />
+        <label>Ваша страна:</label>
+        <select id="country">
+        </select>
+        <br />
+        <label>Ваш город:</label>
+        <select id="city">
+        </select>
+        <br />
+        <label>Кратко о себе:</label>
+        <textarea placeholder="краткая информация о ваших увлечениях" cols="39" id="aboutMe" name="Кратко о себе"></textarea>
+        <br />
+        <label>Решите пример, запишите результат в поле ниже:</label>
+        <span></span>
+        <br />
+        <input type="text" size="31" id="antibot" name="Решите пример"/>
+        <br />
+        <input type="reset" value="Отменить ввод" id="dont"/>
+        <input type="submit" value="Данные подтверждаю"  id="ok"/>
+    </form>    
 </body>
 </html>

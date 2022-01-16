@@ -11,6 +11,7 @@ var yanCoord = require('./getCoord')
 // const rpInfo = require('./rp5')
 const detranslator = require('./detranslator')
 const mailInfo = require('./requests/mail.request')
+const path = require('path');
 
 const connection = mysql.createConnection({
     host: "95.213.236.125",
