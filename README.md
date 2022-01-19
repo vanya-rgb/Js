@@ -1,1 +1,1 @@
-link Anyweather http://anyweather.xyz/
+link Anyweather: http://anyweather.xyz/
