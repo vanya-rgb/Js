@@ -2,12 +2,12 @@ var express = require('express');
 const maxmind = require('maxmind');
 const weatherRequest = require('./requests/weather.request')
 const yanInfo = require('./requests/yandex.request');
-// const rpInfo = require('./rp5')
 var router = express.Router();
 const mysql = require("mysql2");
 const detranslator = require('./detranslator')
 const mailInfo = require('./requests/mail.request')
 const yanCoord = require('./getCoord')
+const cityByIp = require('./getLocate.js')
 
 const connection = mysql.createConnection({
     host: "95.213.236.125",
@@ -45,14 +45,9 @@ router.get('/', async(req,res) => {
                 var clientIp1 = req.ipInfo.ip
                 console.log("client Ip = ", clientIp1)
                 var clientIp = "77.222.109.177"
-                const lookup = await maxmind.open(__dirname+'/public/path/to/GeoLite2-City.mmdb');
-                const location = lookup.get(clientIp)
+                var {city, lat, long} = await cityByIp(clientIp)
+                console.log("город по Ip: ", city)
                 // console.log(location)
-                var city = location.city.names.ru.toLocaleLowerCase();
-                console.log("город по Ip", city)
-                // console.log(location)
-                var lat = location.location.latitude
-                var long = location.location.longitude
                 console.log(lat, long)
 
                 //поиск по базе данных

@@ -1,4 +1,4 @@
-module.exports = function (text){
+module.exports = function(text){
 
   var transl = {};
       transl['а']='a';
@@ -39,19 +39,13 @@ module.exports = function (text){
   
       var result = '';
 
-      if (text[0] == 'е'){
-        result += 'ye'
-        for(i=1;i<text.length;i++) {
-          if(transl[text[i]] != undefined) { result += transl[text[i]]; }}
-      }
-      else{
+      
         for(i=0;i<text.length;i++) {
           if(transl[text[i]] != undefined) { result += transl[text[i]]; }
           else { result += text[i]; }
         }
-      }
+      
 
-      //console.log(result)
+      console.log(result)
       return result
 }
-//send('челябинск')

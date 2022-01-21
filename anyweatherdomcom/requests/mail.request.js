@@ -72,7 +72,7 @@ module.exports =  async function(city='') {
     week.push({
         temp: selectorEx('div[class="day__temperature "]').text().split("°")
     })
-    console.log(week)
+    //console.log(week)
 
     try{
         return {
