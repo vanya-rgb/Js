@@ -7,7 +7,7 @@ const mysql = require("mysql2");
 const detranslator = require('./detranslator')
 const mailInfo = require('./requests/mail.request')
 const yanCoord = require('./getCoord')
-const cityByIp = require('./getLocate.js')
+const cityByIp = require('./getLocation.js')
 
 const connection = mysql.createConnection({
     host: "95.213.236.125",
@@ -44,23 +44,34 @@ router.get('/', async(req,res) => {
             try{
                 var clientIp1 = req.ipInfo.ip
                 console.log("client Ip = ", clientIp1)
-                var clientIp = "77.222.109.177"
-                var {city, lat, long} = await cityByIp(clientIp)
-                console.log("город по Ip: ", city)
-                // console.log(location)
-                console.log(lat, long)
+                var clientIp1 = "37.220.182.81"
 
-                //поиск по базе данных
+                //поиск по базе ip
+                connection.query(`SELECT * FROM ip_info WHERE ip = '${clientIp1}'`, async function(err, results){
+                    if (results.length == 0) {
+                        connection.query(`INSERT INTO ip_info(ip, dateUpdate, dateCreate, accessCount) VALUES('${clientIp1}', NOW(), NOW(), 0)`, (err, results) => {
+                            if (err) console.log(err)
+                            console.log("Внесли в базу ip в пост запросе!")
+                        })
+                    }
+                    else {
+                        var accessCount = results[0].accessCount + 1
+                        connection.query(`UPDATE ip_info SET accessCount = ${accessCount}, dateUpdate = NOW() WHERE ip = '${clientIp1}'` , (err, results) => {
+                            if (err) console.log(err)
+                            console.log("обновили accessCount!")
+                        })
+                    }
+                })
+
+                var {city, lat, long, org, timeZone} = await cityByIp(clientIp1)
+
+                //поиск по базе данных городов
                 connection.query(`SELECT * FROM mytable1 WHERE nameOfCity = '${city}'`, async function(err, results) {
 
                     //если города раньше не было в базе
                     if (results.length == 0) {
-            
-                        //с яндекс API
-                        var {lat, long} = await yanCoord(city)
-                        console.log("Получили с яндекс IP",lat, long)
                         
-                        connection.query(`INSERT INTO mytable1(nameOfCity, latitude, longitude, dateCreate, dateUpdate, accessCount) VALUES('${city}', ${lat}, ${long}, NOW(), NOW(), 0)`, (err, results) => {
+                        connection.query(`INSERT INTO mytable1(nameOfCity, latitude, longitude, dateCreate, dateUpdate, accessCount, org, time_zone) VALUES('${city}', ${lat}, ${long}, NOW(), NOW(), 0, '${org}', '${timeZone}')`, (err, results) => {
                             if (err) console.log(err)
                             console.log("Внесли в базу в пост запросе!")
                         })

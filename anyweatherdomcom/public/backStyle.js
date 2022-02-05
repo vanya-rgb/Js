@@ -6,7 +6,7 @@ var $type = document.querySelector('.type').innerText
 var $image = document.querySelector('.coolImage')
 switch($type){
     case 'Clouds':{
-        $body.style.backgroundImage = 'url(final2.png)'
+        $body.style.backgroundImage = 'url(final1.png)'
         $image.src = "pony.png"
         $image.style.width = '30%'
         break
