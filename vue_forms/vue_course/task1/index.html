@@ -21,7 +21,12 @@
             v-for="(step, idx) in steps"
             @click="setActive(idx)"
             :key="step" 
-            :class="idx == activeIndex ? 'steps-item active' : 'steps-item'"><span>{{idx+1}}</span>{{step.title}}
+            :class="{
+              'steps-item': true,
+              'active': idx == activeIndex,
+              'done': idx < activeIndex
+            }"
+            ><span>{{idx+1}}</span>{{step.title}}
           </li>
           
         </ul>

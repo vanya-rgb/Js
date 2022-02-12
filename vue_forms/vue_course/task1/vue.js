@@ -35,7 +35,8 @@ const App = {
     },
     setActive(idx) {
       // когда нажимаем на определенный шаг
-      this.activeIndex = idx 
+      this.activeIndex = idx
+      
     }
   },
   computed: {
