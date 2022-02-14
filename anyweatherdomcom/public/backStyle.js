@@ -4,6 +4,7 @@ var $boxYan = document.querySelector('.weatherYan')
 var $body = document.body
 var $type = document.querySelector('.type').innerText
 var $image = document.querySelector('.coolImage')
+
 switch($type){
     case 'Clouds':{
         $body.style.backgroundImage = 'url(final1.png)'
@@ -32,9 +33,12 @@ switch($type){
         break
     }
     default: {
-        $body.style.backgroundImage = 'url(final1.png)' 
+        $body.style.backgroundImage = 'url(final1.png)'
     }
 }
+$( document ).ready(function() {
+    console.log( "ready!" );
+});
 
 
 // $boxYan.addEventListener('mouseenter', (event) =>{

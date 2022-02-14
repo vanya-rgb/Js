@@ -17,10 +17,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
     <script src="https://bootstraptema.ru/plugins/2016/shieldui/script.js"></script>
+    <script>
+        function loadPage() {
+            document.querySelector('body').style.display='flex';
+            cont()
+        }
+    </script>
 
 </head>
 
-<body>
+<body onload="loadPage()" style="display:none">
 
     <div class="container-fluid">
         

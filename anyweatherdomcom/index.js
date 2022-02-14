@@ -129,8 +129,8 @@ app.post('/', async (req, res)=>{
 
 
         var citytoRender = cityYan ? cityYan : city
-
-        res.render('templateEn', {citytoRender,opentempofWeek1,opentempofWeek2,opentempofWeek3,opentempofWeek4,opentempofWeek5,opentempofWeek6,opentempofWeek7,opentempofNight1,opentempofNight2,opentempofNight3,opentempofNight4,opentempofNight5,opentempofNight6,opentempofNight7,timezone,openTemp,openType,openWind,openPressure,openHumidity,lsVisible,error,weatherYan,mainYan,windYan,pressureYan,humidityYan,lsVisibleYan,errorYan,tempofDay1,tempofDay2,tempofDay3,tempofDay4,tempofDay5,tempofDay6,tempofDay7,tempofNihgt1,tempofNihgt2,tempofNihgt3,tempofNihgt4,tempofNihgt5,tempofNihgt6,tempofNihgt7,dayofWeek1,dayofWeek2,dayofWeek3,dayofWeek4,dayofWeek5,dayofWeek6,dayofWeek7,dayofWeek8,mailtempofDay1,mailtempofDay2,mailtempofDay3,mailtempofDay4,mailtempofDay5,mailtempofDay6,mailtempofDay7,mailtempoNight1,mailtempoNight2,mailtempoNight3,mailtempoNight4,mailtempoNight5,mailtempoNight6,mailtempoNight7,tempMailNow,typeMailNow,pressureMailNow,humidityMailNow,windMailNow,isVisibleMail})
+        
+         res.render('templateEn', {citytoRender,opentempofWeek1,opentempofWeek2,opentempofWeek3,opentempofWeek4,opentempofWeek5,opentempofWeek6,opentempofWeek7,opentempofNight1,opentempofNight2,opentempofNight3,opentempofNight4,opentempofNight5,opentempofNight6,opentempofNight7,timezone,openTemp,openType,openWind,openPressure,openHumidity,lsVisible,error,weatherYan,mainYan,windYan,pressureYan,humidityYan,lsVisibleYan,errorYan,tempofDay1,tempofDay2,tempofDay3,tempofDay4,tempofDay5,tempofDay6,tempofDay7,tempofNihgt1,tempofNihgt2,tempofNihgt3,tempofNihgt4,tempofNihgt5,tempofNihgt6,tempofNihgt7,dayofWeek1,dayofWeek2,dayofWeek3,dayofWeek4,dayofWeek5,dayofWeek6,dayofWeek7,dayofWeek8,mailtempofDay1,mailtempofDay2,mailtempofDay3,mailtempofDay4,mailtempofDay5,mailtempofDay6,mailtempofDay7,mailtempoNight1,mailtempoNight2,mailtempoNight3,mailtempoNight4,mailtempoNight5,mailtempoNight6,mailtempoNight7,tempMailNow,typeMailNow,pressureMailNow,humidityMailNow,windMailNow,isVisibleMail})
     })
     
     

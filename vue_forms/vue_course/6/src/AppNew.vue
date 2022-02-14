@@ -7,12 +7,15 @@
       <div v-if="isNewsOpen">
           <p v-if="isNewsOpen">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe commodi qui ducimus vel quis! Dignissimos illum amet, soluta maiores quia eos laboriosam nemo ea molestias id sed repudiandae nesciunt in?</p>
           <app-button v-if = "!wasRead" color="primary" @action= "mark">Read news</app-button>
+            <!-- передали параметр из App -->
+          <app-news-list></app-news-list>
       </div>
     </div>
 </template>
 
 <script>
 import AppButton from "./AppButton.vue"
+import AppNewsList from './AppNewsList.vue'
 export default {
     // props: ['title'],
     props: {
@@ -33,7 +36,7 @@ export default {
             validator(value){
                 return value === true || value === false
             }
-        }
+        },
     },
     // emits: ['open-news'],
     emits: {
@@ -68,7 +71,7 @@ export default {
         // }
     },
     components: {
-        AppButton
+        AppButton, AppNewsList
     }
 }
 </script>
