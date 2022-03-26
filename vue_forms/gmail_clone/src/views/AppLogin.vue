@@ -12,7 +12,10 @@
     </div>
 
     <button class="btn primary" type="submit">Войти</button>
-    <button class="btn warning">Забыл пароль?</button>
+    <!-- //пример работы router -->
+    <router-link to="/forget" v-slot = "{ navigate }">
+      <button class="btn warning" @click="navigate">Забыл пароль</button>
+    </router-link>
   </form>
 </template>
 
@@ -33,9 +36,15 @@ export default {
     submit() {
       if (this.isValid) {
         // login
+        //PUSH сохраняет историю переходов, replace нет
+        //this.$router.push('/dashboard')
+        // this.$router.replace('/dashboard')
+        this.login()
+
       }
     }
-  }
+  },
+  inject: ['login']
 }
 </script>
 

@@ -3,26 +3,29 @@
     <div class="card-nav">
       <ul class="list">
         <li class="list-item" v-for="email in emails" :key="email.id">
-          <a href="#">
+          <router-link :to="'/mail/' + email.id">
             {{email.theme}}
-          </a>
+          </router-link>
         </li>
       </ul>
     </div>
     <div class="card-body">
-      <app-email-body></app-email-body>
+      <!-- router-view отвечает за наследуемый элемент -->
+      <router-view></router-view> 
+      <!-- //Это был пример с передачей параметра из router -->
+      <!-- <app-email-body :mail-id="$route.params.mailId"></app-email-body> -->
     </div>
   </div>
 </template>
 
 <script>
-import AppEmailBody from '../components/AppEmailBody'
+//import AppEmailBody from '../components/AppEmailBody'
 
 export default {
   // components: {AppEmailBody},
   inject: ['emails'],
   components: {
-    AppEmailBody
+    //AppEmailBody
   }
 }
 </script>
