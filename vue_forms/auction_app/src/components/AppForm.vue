@@ -1,55 +1,78 @@
 <template>
     <div class="container">
       <form class="card" @submit.prevent="submitHandler">
-          <h1>Анкета регистрации</h1>
+          <h1>Registration form</h1>
         <app-input
           type = "text"
-          placeholder="Введите имя"
+          placeholder="Enter your name"
           :error = "errors.firstName"
-          label = "Как тебя зовут?"
+          label = "What is your name?"
           v-model = "firstName"
         ></app-input>
 
         <app-input
           type = "text"
-          placeholder="Введите фамилию"
+          placeholder="Enter last name"
           :error = "errors.secondName"
-          label = "Твоя фамилия"
+          label = "What is your last name?"
           v-model = "secondName"
         ></app-input>
 
         <app-input
+          type = "text"
+          placeholder="Enter login"
+          :error = "errors.login"
+          label = "Enter login here"
+          v-model = "login"
+        ></app-input>
+
+        <app-input
             type= "email"
-            placeholder="Введите email здесь"
+            placeholder="Enter email here"
             :error= "errors.email"
-            label="Укажи Email"
+            label="Enter email"
             v-model= "email"
+        ></app-input>
+
+        <app-input
+            type= "password"
+            placeholder="Enter password"
+            :error= "errors.password"
+            label="Enter password here"
+            v-model= "password"
+        ></app-input>
+
+        <app-input
+            type= "password"
+            placeholder="Reenter password"
+            :error= "errors.password"
+            label="Reenter password here"
+            v-model= "repeatPassword"
         ></app-input>
 
         <div class="form-checkbox">
             <div class="checkbox">
-                <label for=""><input v-model="sex" type="radio" value="M" name="sex">M</label>
+                <label for=""><input v-model="sex" type="radio" value="male" name="sex">male</label>
             </div>
             <div class="checkbox">
-                <label for=""><input v-model="sex" type="radio" value="Ж" name="sex">Ж</label>
+                <label for=""><input v-model="sex" type="radio" value="female" name="sex">female</label>
             </div>
         </div>
 
         <div class="form-control">
-            <label for="age">Сколько тебе лет?</label>
+            <label for="age">How old are you?</label>
             <input type="number" id="age" v-model.number= "age">
         </div>
 
         <button
             class="btn primary"
             type="submit"
-        >Отправить</button>
+        >Send</button>
       </form>
-    
     <app-modal
         v-if="modal"
         @close="modal = false"
-        @toPrivateCabinet="privateCabinet"
+        @toPrivateCabinet="navigate"
     ></app-modal>
   </div>
 </template>
@@ -57,18 +80,38 @@
 <script>
 import AppInput from './AppInput.vue'
 import AppModal from './AppModal.vue'
+import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
     export default {
+        setup(){
+            
+            const router = useRouter()
+            const store = useStore()
+            //переход в личный после регистрации
+            const navigate = () => {
+                store.dispatch('changeAuthStatus')
+                router.push('/lk')
+            }
+            return {
+                navigate
+            }
+        },
         data() {
             return {
                 firstName: '',
                 secondName: '',
                 email: '',
+                password: '',
+                repeatPassword: '',
+                login: '',
                 age: 23,
-                sex: 'M',
+                sex: 'male',
                 errors: {
                     firstName: null,
                     secondName: null,
-                    email: null
+                    email: null,
+                    password: null,
+                    login: null
                 },
                 modal: false
             }
@@ -78,20 +121,38 @@ import AppModal from './AppModal.vue'
             isValid() {
                 let isValid = true
 
+                if (this.password.lenght < 6 || this.repeatPassword < 6) {
+                    this.errors.password = 'Password must be longer than 6 characters'
+                    isValid = false
+                } 
+                else if (this.repeatPassword !== this.password){
+                    this.errors.password = 'Passwords do not match'
+                    isValid = false
+                } else {
+                    this.errors.password = null
+                }
+
+                if(this.login.length == 0) {
+                    this.errors.login = 'Login cannot be empty'
+                    isValid = false
+                } else {
+                    this.errors.login = null
+                }
+
                 if(this.email.length == 0) {
-                    this.errors.email = 'Электронная почта не может быть пустой'
+                    this.errors.email = 'Email cannot be empty'
                     isValid = false
                 } else {
                     this.errors.email = null
                 }
                 if (this.firstName.length == 0) {
-                    this.errors.firstName = 'Имя не может быть пустым'
+                    this.errors.firstName = 'Name cannot be empty'
                     isValid = false
                 } else {
                     this.errors.firstName = null
                 }
                 if(this.secondName.length == 0) {
-                    this.errors.secondName = 'Фамилия не может быть пустой'
+                    this.errors.secondName = 'Last name cannot be empty'
                     isValid = false
                 } else {
                     this.errors.secondName = null
@@ -102,19 +163,12 @@ import AppModal from './AppModal.vue'
             },
             submitHandler() {
                 if (this.isValid()) {
-                    console.log("FirstName:", this.firstName)
-                    console.log("SecondName:", this.secondName)
-                    console.log("Email:", this.email)
-                    console.log("Sex", this.sex)
-                    console.log("Age", this.age)
                     this.modal = true
+
                 }
             },
 
-            //переход в личный после регистрации
-            privateCabinet() {
-                console.log('vwevw')
-            }
+            
         },
   components: {
     AppInput, AppModal
