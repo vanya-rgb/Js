@@ -3,6 +3,7 @@
         <div class="card">
             <p>Well dude, if you forgot, it's time to remember</p>
         </div>
+        
     </div>
 </template>
 

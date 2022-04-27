@@ -5,7 +5,13 @@ export default createStore({
   state() {
       return{
           isAuth: false,
-          tasks: JSON.parse(localStorage.getItem('my-tasks')) ?? []
+          tasks: JSON.parse(localStorage.getItem('my-tasks')) ?? [],
+          user: {
+              firstName: '',
+              secondName: '',
+              sex: '',
+              age: ''
+          }
       }
   },
   mutations: {
@@ -21,7 +27,14 @@ export default createStore({
           const idx = state.tasks.findIndex(t=> t.id == task.id)
           state.tasks[idx] = task
           localStorage.setItem('my-tasks', JSON.stringify(state.tasks))
+      },
+      createUser(state, newUser){
+          state.user.firstName = newUser.firstName
+          state.user.secondName = newUser.secondName
+          state.user.age = newUser.age
+          state.user.sex = newUser.sex
       }
+
   },
   actions: {
       changeAuthStatus({commit}){
@@ -29,12 +42,15 @@ export default createStore({
       },
       createTask({commit}, task){
           if (task.date < new Date()) {
-              task.status = 'canseled'
+              task.status = 'cancelled'
           }
           commit('createTask', task)
       },
       changeTask({commit}, task) {
           commit('changeTask', task)
+      },
+      createUser({commit}, newUser) {
+          commit('createUser', newUser)
       }
   },
   getters:{
@@ -43,6 +59,9 @@ export default createStore({
     },
     tasks(state){
         return state.tasks
+    },
+    user(state){
+        return state.user
     },
     activeTasksCount(state){
         return state.tasks.filter(t => t.status == 'active').length

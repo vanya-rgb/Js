@@ -1,6 +1,6 @@
 <template>
     <!-- если ошибка то invalid -->
-    <div class="form-control" :class="{invalid: error}">
+    <div class="form-control">
         <label :for= "id">{{label}}</label>
         <input
             :type="type"
@@ -22,9 +22,6 @@
             modelValue: String,
             placeholder: String,
             label: String,
-            error: {
-                type: String
-            }
         },
         data() {
             return {

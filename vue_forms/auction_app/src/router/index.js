@@ -46,9 +46,19 @@ const routes = [
         name: 'Create',
         component: () => import('../components/AppForm.vue'),
         meta: {
-            layout: 'auth'
+            layout: 'main'
         }
     },
+    {
+        path: '/task/:id',
+        name: 'Task',
+        props: true,
+        component: () => import('../views/tasks/TaskPage.vue'),
+        meta: {
+            layout: 'main'
+        }
+    },
+    
 ]
 
 const router = createRouter({

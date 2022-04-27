@@ -20,9 +20,9 @@
 
                 <button class="btn primary"
                 :disabled="!isValid">Create</button>
-                <butto class="btn danger"
+                <button class="btn danger"
                 @click="$emit('close')"
-                >Close</butto>
+                >Close</button>
             </form>
         </div> 
     </div>
@@ -38,14 +38,14 @@ import {computed, ref} from 'vue'
             const store = useStore()
             const router = useRouter()
             const title = ref('')
-            const date = ref('')
+            const date = ref(null)
             const description = ref('')
             
             const submit = () => {
                 const newTask = {
                     id: Date.now().toString(),
-                    titme: title.value,
-                    date: new Date(date.value),
+                    title: title.value,
+                    date: new Date(date.value).setHours(23,59,59,999),
                     description: description.value,
                     status: 'active'
                 }

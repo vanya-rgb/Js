@@ -22,10 +22,10 @@ export default {
     }
 
     const textMap = {
-      active: 'Активен',
-      cancelled: 'Отменен',
-      done: 'Завершен',
-      pending: 'Выполняется'
+      active: 'Active',
+      cancelled: 'Canceled',
+      done: 'Completed',
+      pending: 'In progress'
     }
 
     const className = ref(classesMap[props.type])
