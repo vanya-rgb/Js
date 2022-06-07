@@ -55,8 +55,11 @@ import {useStore} from 'vuex'
 import AppLoader from '../components/ui/AppLoader.vue'
 import AppPage from '../components/ui/AppPage.vue'
 import { preload } from 'vue-onload'
-import { ref as stRef, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage'
-import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
+// import { ref as stRef, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage'
+// import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
+import createUploader from '../components/dragNdrop/composition/file-uploader'
+// import {ref as StRef, deleteObject } from "firebase/storage";
+
 
 
 // import {useRoute} from 'vue-router'
@@ -70,6 +73,7 @@ import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
             const uploadPic = ref()
             const loading = ref(false)
             const photoUrl = ref(`${process.env.BASE_URL}upload.jpg`)
+            const oldPhotoUrl = ref()
             const displayName = ref()
             const email = ref()
             const password = ref()
@@ -79,59 +83,40 @@ import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
                 return password.value === password_else.value
             })
             
-
             const store = useStore()
             const isUnavailable = ref(false)
 
             const {file, addFile} = useFileList()
+
             const onChange = async (e) => {
-                uploadPic.value = e.target.files[0]
                 addFile(e.target.files[0])
-                console.log(uploadPic.value);
                 photoUrl.value = file.value.url
                 isUpload.value = true
-                console.log("photoUrl", photoUrl.value);
             }
             const onDrop = (e) => {
-                uploadPic.value = e[0]
                 addFile(e[0])
                 photoUrl.value = file.value.url
                 isUpload.value = true
-                console.log("photoUrl", photoUrl.value);
             }
             const removeFile = () => {
                 photoUrl.value = `${process.env.BASE_URL}upload.jpg`
                 isUpload.value = false
             }
-            const userId = computed(()=> store.getters['auth/userId'])
+            // const userId = computed(()=> store.getters['auth/userId'])
 
             const upload = async () => {
-                const storage = getStorage()
-                const database = getDatabase()
-                const databaseReference = dbRef(database, 'files')
-                const storageRef = stRef(storage, 'files/'+userId.value+'/'+ uploadPic.value.name)
-                console.log('storageRef', storageRef);
-                await uploadBytes(storageRef, uploadPic.value).then(() => {
-                    const newFileRef = push(databaseReference)
-                    set(newFileRef, {
-                        "name": uploadPic.value.name
-                    })
-                })
+                // const desertRef = StRef(oldPhotoUrl.value)
+                // await deleteObject(desertRef).then(()=>{
+                //     console.log("Заебк");
+                // })
+                const { uploadFile } = createUploader()
+                const {url} = await uploadFile(file.value)
+                photoUrl.value = url
             }
-            const onValueLoad = async () => {
-                const storage = getStorage()
-                
-                const storageRefDownload = stRef(storage, 'files/'+userId.value+'/'+ uploadPic.value.name)
-                
-                await getDownloadURL(storageRefDownload).then((url)=>{
-                    photoUrl.value = url
-                })
-                console.log("Link pic", photoUrl.value);
-            }
+
             const setAccountInfo = async() => {
                 isUnavailable.value = true
                 await upload()
-                await onValueLoad()
                 await store.dispatch({type:'user/changeProfile', photoUrl: photoUrl.value})
                 isUnavailable.value = false
             }
@@ -148,9 +133,10 @@ import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
             onMounted(async() => {
                 loading.value = true
                 const actualData = await store.dispatch('user/getProfile')
+                console.log(actualData);
                 email.value = actualData.users[0].email
                 actualData.users[0].displayName ? displayName.value = actualData.users[0].displayName : displayName.value = ''
-                
+                oldPhotoUrl.value = actualData.users[0].photoUrl
                 
                 const sources = [
                         photoUrl.value
@@ -172,6 +158,3 @@ import { getDatabase, ref as dbRef, push, set} from 'firebase/database'
     }
 </script>
 
-<style lang="scss" scoped>
-
-</style>

@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
-export function useLoginForm() {
+export function useLoginForm(time) {
     const store = useStore()
     const router = useRouter()
 
@@ -12,23 +12,32 @@ export function useLoginForm() {
 
     const {value: email, errorMessage: eError, handleBlur: eBlur} = useField(
         'email',
-        yup.string().trim().required('Введите email').email()
+        yup.string().trim().required('Введите email').email('очень интересно..')
     )
 
     const {value: password, errorMessage: pError, handleBlur: pBlur} = useField(
         'password',
-        yup.string().trim().required('Введите email').min(6, 'Пароль должен быть не меньше 6 символов')
+        yup.string().trim().required('Не забудьте ввести пароль').matches(/[a-z]|[а-я]+/, {message: 'Требуется хотя бы 1 символ нижнего регистра'}).matches(/[A-Z]|[А-Я]+/, {message: 'Хотя бы 1 символ верхнего регистра'}).matches(/[0-9]+/, {message: 'Добавьте хотя-бы одну цифру'}).min(6, 'Хотя бы 6 символов')
     )
 
     const isTooManyAttempts = computed(()=> submitCount.value > 5)
+    const leftTwo = computed(()=> submitCount.value == 4)
+    const leftOne = computed(()=> submitCount.value == 5)
 
-    watch(isTooManyAttempts, val => {
+    watch(isTooManyAttempts, (val) => {
         if (val) {
-            setTimeout(()=> submitCount.value = 0, 5000)
+            localStorage.setItem('isTooManyAttempts', true)
+            localStorage.setItem('time', new Date())
+            setTimeout(()=> {
+                submitCount.value = 0
+            }, time)
         }
     })
     const onSubmit = handleSubmit(async values => {
         try{
+            submitCount.value = 0
+            localStorage.removeItem('isTooManyAttempts')
+            localStorage.removeItem('time')
             await store.dispatch('auth/login', values)
             router.push('/')
         } catch(e) {
@@ -38,6 +47,6 @@ export function useLoginForm() {
 
     return {
         email, password, eError, pError, eBlur, pBlur,
-        onSubmit, isSubmitting, isTooManyAttempts
+        onSubmit, isSubmitting, isTooManyAttempts, leftTwo, leftOne
     }
 }

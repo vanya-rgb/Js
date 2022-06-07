@@ -1,5 +1,7 @@
 import axios from '../../axios/request'
 import store from '../index'
+import {useRouter} from 'vue-router'
+const router = useRouter()
 
 export default {
     namespaced: true,
@@ -21,7 +23,8 @@ export default {
             try {
                 const token = store.getters['auth/token']
                 const {data} = await axios.post(`/requests.json?auth=${token}`, payload)
-                console.log('шаблон',data);
+                console.log('DATA', data);
+                console.log('PAYLOAD', payload);
                commit('addRequest', {...payload, id: data.name})
                 dispatch('setMessage', {
                     value: 'Заявка создана',
@@ -40,12 +43,26 @@ export default {
                 const {data} = await axios.get(`/requests.json?auth=${token}`)
                 // console.log(data);
                 //Формирование нового массива
-                const requests = Object.keys(data).map(id => ({
-                    ...data[id], id
-                }))
-                commit('setRequests', requests)
                 
+                if (data) {
+                    const requests = Object.keys(data).map(id => ({
+                        ...data[id], id
+                    }))
+
+                    commit('setRequests', requests)
+                }
+                else {
+                    commit('setRequests', [])
+                }
+
             } catch (e) {
+                console.log("ERROR IN RESPONSE DATA",e);
+                const res = e.response.data.error.message
+                console.log(e.response.data.error.message);
+                console.log(e.code);
+                if (res == '123') {
+                    router.push('/auth')
+                }
                 dispatch('setMessage', {
                     value: e.message,
                     type: 'danger'

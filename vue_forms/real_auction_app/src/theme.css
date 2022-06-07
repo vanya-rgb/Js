@@ -1,7 +1,134 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+/* @import 'materialize-css/dist/css/materialize'; */
 
 * {
     box-sizing: border-box;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+    margin: 10px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #42B983;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #42B983;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+#upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    outline: 2px dashed #5d5d5d;
+    outline-offset: -12px;
+    background-color: #e0f2f7;
+    font-family: 'Segoe UI';
+    color: #1f3c44;
+}
+#upload-container img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    user-select: none;
+}
+
+#upload-container div {
+    position: relative;
+    z-index: 10;
+}
+
+
+.wrapper input[type=file] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    position: absolute;
+    z-index: -10;
+}
+
+.upload-container.label {
+    font-weight: bold;
+}
+
+.upload-container.label:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.wrapper  {
+    /* border: 5px solid #515151; */
+    max-width: 300px;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1f3c44;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    
+}
+.wrapper img {
+    width: 100%;
+    height: 100%;
+    image-rendering: auto;
+    /* flex-shrink: 0; */
 }
 
 body {
@@ -32,6 +159,7 @@ a {
     color: #3eaf7c;
     font-weight: 500;
     text-decoration: none;
+    cursor: pointer;
 }
 
 h1,
@@ -59,13 +187,14 @@ h3 {
     font-size: 1.35rem;
 }
 
-/*.primary {*/
-/*    color: #42b983;*/
-/*}*/
+.primary {
+     color: #42b983;
+     font-size: smaller;
+}
 
 /*.danger {*/
 /*    color: #e53935;*/
-/*}*/
+/*} */
 
 .btn {
     color: #42b983;
@@ -162,9 +291,16 @@ h3 {
     font-size: 1rem;
     resize: none;
 }
+.form-control.min input {
+    width: 50%;
+}
 
 .form-control small {
     color: #e53935;
+}
+
+.form-control small .text-green{
+    color: #0ab939;
 }
 
 .form-control.invalid input {
@@ -407,6 +543,11 @@ h3 {
     border-bottom: 2px solid #3eaf7c;
 }
 
+.navbar-menu .content:hover {
+    color: #3eaf7c;
+    cursor: pointer;
+}
+
 .card-title {
     display: flex;
     justify-content: space-between;
@@ -420,9 +561,17 @@ h3 {
     padding: 0 .5rem;
 }
 
+.badge.cursor {
+    cursor: pointer;
+}
+
 .badge.primary {
     border-color: #3eaf7c;
     color: #3eaf7c;
+}
+.badge.attention {
+    border-color: #df4a0a;
+    color: #df4a0a;
 }
 
 .badge.danger {
@@ -431,12 +580,23 @@ h3 {
 }
 
 .badge.warning {
-    border-color: #c25205;
-    color: #c25205;
+    border-color: #d0a30e;
+    color: #d0a30e;
+}
+
+.badge.disabled {
+    cursor: not-allowed;
+    opacity: 1!important;
+    background: #eee!important;
+    border-color: #ddd!important;
+    color: #999!important;
 }
 
 .text-white {
     color: #fff;
+}
+.text-green {
+    color: rgb(19, 200, 47);
 }
 
 .text-danger {
@@ -447,8 +607,18 @@ h3 {
     text-align: center;
 }
 
+.text {
+    font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
+    font-size: 1rem;
+    resize: none;
+}
+
 .table {
     width: 100%;
+    border-collapse: collapse;
+}
+.table.min {
+    width: 50%;
     border-collapse: collapse;
 }
 
@@ -501,6 +671,15 @@ h3 {
     right: 20px;
     font-size: 2rem;
     cursor: pointer;
+}
+
+.close-icon {
+    width: 20px;
+    height: 20px;
+    /* background: #e0f2f7; */
+    cursor: pointer;
+    align-items: center;
+    margin-left: 140px;
 }
 
 .sidebar-content {

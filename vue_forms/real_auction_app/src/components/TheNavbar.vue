@@ -10,10 +10,12 @@
                     <router-link to="/help">Помощь</router-link>
                 </li>
                 <li>
-                    <router-link to="/lk">Личный кабинет</router-link>
+                    <router-link :to="{name: 'PrivateCabinet', params: {localId}}">
+                        Личный кабинет
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">Выход</a>
+                    <a href="#" @click.prevent="logout">Выход</a>
                 </li>
             </ul>
         </nav>
@@ -21,11 +23,18 @@
 </template>
 
 <script>
+import {useStore} from 'vuex'
+import {computed} from 'vue'
     export default {
-        
+        setup() {
+            const store = useStore()
+            const localId = computed(()=> store.getters['auth/localId'])
+
+            return {
+                logout: () => {
+                    store.commit('auth/logout')
+                }, localId
+            }
+        }
     }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

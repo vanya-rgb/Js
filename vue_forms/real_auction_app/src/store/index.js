@@ -1,14 +1,13 @@
-import { createStore, createLogger } from 'vuex'
+import { createStore } from 'vuex'
 import auth from './modules/auth.module'
-import process from 'process'
+import user from './modules/user.module'
+import update from './modules/update.module'
+import requestUsersModule from './modules/request-users.module'
+import request from './modules/request.module'
+import help from './modules/help.module'
 
-const plagins = []
-if (process.env.NODE_ENV === 'development') {
-  plagins.push(createLogger())
-}
 
 export default createStore({
-  plagins,
   state() {
     return {
       message: null
@@ -27,10 +26,10 @@ export default createStore({
       commit('setMessage', message)
       setTimeout(()=> {
         commit('clearMessage')
-      }, 5000)
+      }, 10000)
     }
   },
   modules: {
-    auth
+    auth, user, update, requestUsersModule, request, help
   }
 })

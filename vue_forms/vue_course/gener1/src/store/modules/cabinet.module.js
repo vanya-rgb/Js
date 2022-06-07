@@ -1,8 +1,7 @@
 import axios from 'axios';
 import store from '../index'
-import app from '../../firebase/index'
 import { getStorage, ref as stRef, getDownloadURL} from 'firebase/storage'
-const storage = getStorage(app)
+const storage = getStorage()
 
 export default {
     namespaced: true,

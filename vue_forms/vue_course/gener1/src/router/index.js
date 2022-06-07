@@ -40,6 +40,24 @@ const routes = [
     }
   },
   {
+    path: '/requestLk/:id',
+    name: 'RequestCabinet',
+    component: () => import('../views/RequestPageCabinet.vue'),
+    meta: {
+      layout: 'main',
+      auth: true
+    }
+  },
+  {
+    path: '/:id',
+    name: 'CastomerPage',
+    component: () => import('../views/CastomerPage.vue'),
+    meta: {
+      layout: 'main',
+      auth: true
+    }
+  },
+  {
     path: '/lk/:id',
     name: 'PrivateCabinet',
     component: () => import('../views/PrivateCabinetPage.vue'),
