@@ -2,9 +2,11 @@
     <div>
         <div class="modal-backdrop" @click="$emit('close')"></div>
         <div class="modal">
-            <h3 v-if="title">{{title}}</h3>
+            <div class="sc-modal">
+                <h3 v-if="title">{{title}}</h3>
 
-            <slot></slot>
+                <slot></slot>
+            </div>
         </div>
     </div>
 </template>

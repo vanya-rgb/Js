@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-loader v-if="loading"></app-loader>
-    <app-page title = "Хоть поле и называется помощь, но сейчас помощь нужна мне. Чиркани пару строк что сделать, чтобы было все заимбирь." v-else>
+    <app-page visible="true" title = "Хоть поле и называется помощь, но сейчас помощь нужна мне. Оставь коментарий или замечание" v-else>
     <div class="form-control">
         <textarea v-model="text" rows="3" cols="40"></textarea>
     </div>

@@ -1,23 +1,40 @@
 <template>
-    <div>
-        <td v-if="isVerify">
-            <span class="badge primary"><span>Email&nbsp;</span><span>подтвержден</span></span>
+    <tr class="align-left vertical-align" v-if="isVerify">
+        <th>Email:</th>
+        <td>{{email}}</td>
+        <td>
+            <img src="greenMark.png" alt="">
         </td>
-        <td v-else>
-            <div v-if="isSend">Отправить снова через {{currentTime}} сек.</div>
-            <div :class="['badge danger cursor', {disabled: isSend}]"
-            @click="sendEmail"><strong>Email не подтвержден.</strong><br>
-            Кликните, чтобы отправить email c подтверждением</div>
+    </tr>
+    <tr class="align-left vertical-align" v-else>
+
+        <th>Email:</th>
+        <td>{{email}}</td>
+        <td v-if="!isSend">
+            <img src="redMark.png" alt="" @click="sendEmail">
         </td>
-    </div>
+        <td class="file-preview" v-else>
+            <div class="badge danger cursor">{{currentTime}} сек.</div>
+        </td>
+    </tr>
 </template>
 
 <script>
+import { useStore } from "vuex"
 
     export default {
-        props: ['isVerify'],
+        props: ['isVerify', 'email'],
         emits: ['verifyEmail'],
+        setup(props){
+            const store = useStore()
 
+            if (!props.isVerify) {
+                store.dispatch('setMessage', {
+                    value: 'Нажмите на иконку почты чтобы подтвердить Email',
+                    type: 'warning'
+                }, {root: true})
+            }
+        },
         data(){
             return {
                 currentTime: 60,

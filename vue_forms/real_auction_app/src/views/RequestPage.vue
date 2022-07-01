@@ -4,40 +4,40 @@
         <!-- back как параметр который описан в app page -->
         <div v-else>
         <app-page back title="Заявка" v-if="request">
-            <p><strong>Status</strong>: <app-status :type="status"></app-status></p>
+            <p><strong>Заявка&nbsp;</strong><app-status :type="status"></app-status></p>
+
             <div v-if="localId !== userLocalId">
                 <router-link v-slot="{navigate}" custom :to="{name: 'UserPage', params: {userId: userLocalId}}">
-                    <p><strong>Заказчик</strong>: <a @click="navigate">{{userName}}</a></p>
+                    <strong>Заказчик&nbsp;<a @click="navigate">{{userName}}</a>&nbsp;готов заплатить {{currency(amount)}} за этот заказ.</strong>
                 </router-link>
             </div>
             <div v-else>
                 <router-link v-slot="{navigate}" custom :to="{name: 'PrivateCabinet', params: {localId}}">
-                    <p><strong>Заказчик</strong>: <a @click="navigate">{{userName}}</a></p>
+                    <strong>Заказчик&nbsp;<a @click="navigate">{{userName}}</a>&nbsp;готов заплатить {{currency(amount)}} за этот заказ.</strong>
                 </router-link>
             </div>
-            <p><strong>Сумма</strong>: {{currency(amount)}}</p>
-            <table class="table min" v-if="files">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Файлы</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(r, idx) in files" :key="r.id">
-                        <td>{{idx+1}}</td>
-                        <td>
-                            <a :href="r.url" target="_blank">{{r.name}}</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <p><strong>Необходимо выполнить заявку до {{deadline}} включительно. <br>Что делать за просрок напиши пожалйста в разделе "помощь".</strong></p>
+            <!-- <hr> -->
+            <p><strong>Файлы заказчика:</strong></p>
+            <div v-if="files.length > 0" class="highlight">
+                <file-preview v-for="(file, idx) of files"
+                    :key="file.id"
+                    :file="file"
+                    :idx = "idx"
+                    tag="ul"
+                    ></file-preview>
+            </div><br>
             <div class="form-control">
-                <label for="offer">Сделаю за:</label>
-                <input type="number" onkeypress="if (this.value.length > 4) return false;" v-model.number="offerAmount" required >
+                <label for="offer">Готов сделать за (укажите сумму в рублях):</label>
+                <input type="number"
+                    onkeypress="if (this.value.length > 4) return false;"
+                    v-model.number="offerAmount"
+                    required
+                >
             </div>
             <!-- +disabled || userLocalId == localId -->
-            <button class="btn danger" :disabled="offerAmount == '' || offerAmount == null || alreadyExist || localId == userLocalId" @click="take">Взять за <small v-if="offerAmount">{{currency(offerAmount)}}</small></button>
+            <button class="btn danger" :disabled="offerAmount == '' || offerAmount == null || alreadyExist || localId == userLocalId" @click="take">Взять</button>
+            <!-- <small v-if="offerAmount">за{{currency(offerAmount)}}</small> -->
         </app-page>
         <h3 v-else class="text-center text-white">
             Заявки с ID = {{$route.params.id}} нет.
@@ -47,7 +47,8 @@
             <table class="table" v-if="executorsList.length !== 0">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th></th>
+                        <th></th>
                         <th>Исполнитель</th>
                         <th>Рейтинг</th>
                         <th>Сумма</th>
@@ -55,7 +56,10 @@
                 </thead>
                 <tbody>
                     <tr v-for="(r, idx) in executorsList" :key="r.id">
-                        <td>{{idx+1}}</td>
+                        <td>{{idx+1}}.</td>
+                        <td>
+                            <img class="wrapper" :src="r.photo.miniature" alt="">
+                        </td>
                         <td>
                             <div v-if="localId !== r.localId">
                                 <router-link v-slot="{navigate}" custom :to="{name: 'UserPage', params: {userId: r.localId}}">
@@ -70,6 +74,11 @@
                         </td>
                         <td>{{r.rating.value}}/{{r.rating.count}}</td>
                         <td>{{currency(r.amount)}}</td>
+                        <td v-if="r.localId == localId">
+                        <button class="btn danger"
+                        @click="detele"
+                        >Отказаться от заявки</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -88,11 +97,12 @@ import {useStore} from 'vuex'
 import AppLoader from '../components/ui/AppLoader'
 import AppStatus from '../components/ui/AppStatus.vue'
 import {currency} from '../utils/currency-formator'
+import filePreview from '@/components/dragNdrop/components/filePreview.vue'
 
  
     export default {
         components: {
-            AppPage, AppLoader, AppStatus
+            AppPage, AppLoader, AppStatus, filePreview
         },
 
         setup() {
@@ -113,6 +123,7 @@ import {currency} from '../utils/currency-formator'
             const userLocalId = ref()
             const localId = ref()
             const amount = ref()
+            const deadline = ref()
             const files = ref([])
             const executorsList = ref([])
             const offerAmount = ref()
@@ -129,7 +140,7 @@ import {currency} from '../utils/currency-formator'
                 executorName.value = userDbData.userName
                 rating.value = userDbData.rating
                 photo.value = userDbData.photo
-
+                deadline.value = request.value.date
                 status.value = request.value.status
                 amount.value = request.value.amount
                 userName.value = request.value.userName
@@ -146,6 +157,18 @@ import {currency} from '../utils/currency-formator'
                     item.localId == localId.value
                 )
             )
+
+            const detele = async() => {
+                const newExList = executorsList.value.filter(item => {
+                    if(item.localId != localId.value) return item
+                })
+                //обновили в базе
+                const data = {...request.value, executorsList: newExList, id: route.params.id}
+                await store.dispatch('request/update', data)
+                //локально
+                executorsList.value = newExList
+               
+            }
 
             const take = async() => {
                 const item = {
@@ -165,7 +188,7 @@ import {currency} from '../utils/currency-formator'
             }
 
 
-            return {loading, currency, take, status, amount, offerAmount, userName, request, files, userLocalId, localId, executorsList, alreadyExist, rating
+            return {loading, currency, take, status, amount, offerAmount, userName, request, files, userLocalId, localId, executorsList, alreadyExist, rating, detele, deadline
             }
         }
     }

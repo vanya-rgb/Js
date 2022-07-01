@@ -12,7 +12,7 @@ export function useRegistrationForm() {
 
     const {value: email, errorMessage: eError, handleBlur: eBlur} = useField(
         'email',
-        yup.string().trim().required('Введите email').email('очень интересно..')
+        yup.string().trim().required('Введите email').email('очень интересно..').matches(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i, {message: 'email выглядит не так'})
     )
 
     const {value: password, errorMessage: pError, handleBlur: pBlur} = useField(

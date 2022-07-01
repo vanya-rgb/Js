@@ -1,5 +1,6 @@
 <template>
     <div>
+        <title-component title="Вход в систему"></title-component>
         <form class="card" @submit.prevent="onSubmit">
             <h1>Войти в систему</h1>
 
@@ -15,23 +16,20 @@
                 <small v-if="pError">{{pError}}</small>
             </div>
 
-            <button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts ||attemptsCountFromStorage">Войти</button>
+            <button class="btn primary" type="submit" :disabled="isSubmitting">Войти</button>
             <!-- Регистрация -->
             <router-link to="/reg">
                 <button  button class="btn" type="button">Регистрация</button>
+            </router-link>
+            <router-link to="/forgot">
+                <a href="" @click="clearMessage">Забыли пароль?</a>
             </router-link>
             <div class="text-danger"
             v-if="leftTwo">У вас осталось 2 попытки.</div>
             <div class="text-danger"
             v-if="leftOne">Аккуратней! Осталось только одна попытка.</div>
             <div class="text-danger"
-            v-else-if="isTooManyAttempts ||attemptsCountFromStorage">Попробуйте еще разок через 5 минут.
-            <app-timer 
-            :dateCreate="dateTime" 
-            :timeInterval="time/1000"
-            @timeIsRunning="attemptsCountFromStorage = false"
-            ></app-timer>
-            </div>
+            v-else-if="isTooManyAttempts">Шучу, тыкайтесь сколько хотите:)</div>
         </form>
 
        
@@ -43,32 +41,47 @@ import {useLoginForm} from '../use/login-form'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex'
 import {error} from '../utils/error'
-import {ref} from 'vue'
-import AppTimer from '../components/ui/AppTimer.vue'
+// import {ref} from 'vue'
+import titleComponent from '@/components/ui/titleComponent.vue'
 
     export default {
         setup(){
             const route = useRoute()
             const store = useStore()
+            //прозьба войти в систему
             if (route.query.message) {
                 store.dispatch('setMessage', {
                     value: error(route.query.message),
                     type: 'warning'
                 })
             }
-            const time = ref(300000)
+            //очистка сообщений
+            const clearMessage = () => {
+                store.commit('clearMessage')
+            } 
+            // const time = ref(300000)
             //нужен чтобы ловить статус при перезагрузке  страницы
-            const attemptsCountFromStorage = ref()
-            attemptsCountFromStorage.value = localStorage.getItem('isTooManyAttempts')
+            //const attemptsCountFromStorage = ref()
+            //attemptsCountFromStorage.value = localStorage.getItem('isTooManyAttempts')
 
-            return {...useLoginForm(time.value), time, attemptsCountFromStorage}
+            return {...useLoginForm(), clearMessage}
         },
         components: {
-            AppTimer
+            titleComponent
         }
     }
 </script>
 
-<style lang="scss" scoped>
+<style>
+.text-danger {
+    margin-top: 10px;
+    /* margin-bottom: 10px; */
+}
+a {
+    margin-top: 10px;
+}
+a:hover {
+    color: #42c288;
+}
 
 </style>

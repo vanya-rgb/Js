@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
-export function useLoginForm(time) {
+export function useLoginForm() {
     const store = useStore()
     const router = useRouter()
 
@@ -26,11 +26,9 @@ export function useLoginForm(time) {
 
     watch(isTooManyAttempts, (val) => {
         if (val) {
-            localStorage.setItem('isTooManyAttempts', true)
-            localStorage.setItem('time', new Date())
             setTimeout(()=> {
                 submitCount.value = 0
-            }, time)
+            }, 5000)
         }
     })
     const onSubmit = handleSubmit(async values => {

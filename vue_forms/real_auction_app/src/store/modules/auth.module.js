@@ -68,8 +68,8 @@ export default {
                     isVerifiedEmail: false,
                     localId: data.localId,
                     photo: {
-                        link: 'upload.jpg',
-                        name: 'unnamed'
+                        link: `${process.env.BASE_URL}upload.png`,
+                        miniature: `${process.env.BASE_URL}startSmailik.png`
                     },
                     rating: {
                         count: 0,

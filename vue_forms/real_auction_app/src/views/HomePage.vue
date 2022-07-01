@@ -1,10 +1,14 @@
 <template>
   <div>
+    <title>Главная</title>
     <app-loader v-if="loading"></app-loader>
-    <app-page title = "Список заявок" v-else>
+    <app-page visible="true" title = "Список заявок" v-else>
       <request-filter v-model="filter"></request-filter>
       <reqest-table :requests="requests"></reqest-table>
     </app-page>
+    <!-- <router-link to="/upload">
+      <a href="">Загрузка фоточки</a>
+    </router-link> -->
   </div>
 </template>
 
@@ -35,10 +39,10 @@ export default {
       .sort((a, b) => {
         switch(filter.value.filter) {
           case 'earlier': {
-            return new Date(a.date) - new Date(b.date)
+            return new Date(a.dateSort) - new Date(b.dateSort)
           }
           case 'later': {
-            return new Date(b.date) - new Date(a.date)
+            return new Date(b.dateSort) - new Date(a.dateSort)
           }
           case 'expensive': {
             return b.amount - a.amount

@@ -15,25 +15,33 @@
 
                 <p><strong>&nbsp;Deadline</strong>: {{date}}</p>
 
-                <table class="table">
+                <table class="table file-preview">
                     <tr>
                         <td v-if="request.files">Файлы
                             <tr v-for="r in request.files" :key="r.id">
-                            <td>
-                                <a :href="r.url" target="_blank">{{r.name}}</a>
-                            </td>
+                                <app-icon
+                                    :type="r.type"
+                                    :url="r.url"
+                                    :name="r.name"
+                                ></app-icon>
                             </tr>
                         </td>
+                    </tr>
+                    <tr>
                         <td v-if="request.filesExe">Решение
-                            <tr v-for="r in request.filesExe" :key="r.id">
-                            <td>
-                                <a :href="r.url" target="_blank">{{r.name}}</a>
-                            </td>
-                        </tr>
+                            <tr v-for="file in request.filesExe" :key="file.id">
+                                <app-icon
+                                    :type="file.type" :url="file.url"
+                                    :name="file.name"
+                                ></app-icon>
+                            </tr>
                         </td>
                     </tr>
                 </table>
-                <button class="btn danger" @click="remove">Удалить</button>
+                <button class="btn danger"
+                    @click="remove"
+                    v-if="customerId == localId"
+                >Удалить</button>
             </app-page>
             </div>
             <h3 v-else class="text-center text-white">
@@ -52,10 +60,11 @@ import AppLoader from '../components/ui/AppLoader'
 import AppStatus from '../components/ui/AppStatus.vue'
 import {currency} from '../utils/currency-formator'
 import createRemover from '../components/dragNdrop/composition/file-remove'
+import AppIcon from '@/components/ui/AppIcon.vue'
 
     export default {
         components: {
-            AppPage, AppLoader, AppStatus
+            AppPage, AppLoader, AppStatus, AppIcon
         },
         setup() {
             const loading = ref(true)
@@ -66,8 +75,10 @@ import createRemover from '../components/dragNdrop/composition/file-remove'
             const date = ref()
             const amount = ref()
             const localId = ref()
+            const customerId = ref()
             const file = ref([])
             const filesExe = ref([])
+            const pathRandom = ref()
             //
             const executorsList = ref([])
             //наш объект
@@ -78,7 +89,12 @@ import createRemover from '../components/dragNdrop/composition/file-remove'
                 localId.value = store.getters['auth/localId']
                 //обращаемся к loadById. передаем id из параметров пути
                 request.value = await store.dispatch('request/loadById', route.params.id)
+                //id заказчика
+                customerId.value = request.value.localId
+                //путь к файлам
+                pathRandom.value = request.value.pathRandom
                 //заполение статуса
+                console.log("PATH", `${localId.value}/${pathRandom.value}`);
                 console.log("REQ", request.value);
                 status.value = request.value?.status
                 date.value = request.value?.date
@@ -93,21 +109,31 @@ import createRemover from '../components/dragNdrop/composition/file-remove'
             
             const remove = async () => {
                 if (file.value) {
-                    const { removeFiles } = createRemover(`${localId.value}/forWork`)
+                    const { removeFiles } = createRemover(`${localId.value}/${pathRandom.value}`)
                     await removeFiles(file.value)
                 }
                 if (filesExe.value) {
-                    const { removeFiles } = createRemover(`${localId.value}/forWork`)
+                    const { removeFiles } = createRemover(`${localId.value}/${pathRandom.value}`)
                     await removeFiles(filesExe.value)
                 }
+                const exe = await store.dispatch('user/getUserData', localId.value)
+                console.log("EXE", exe);
+                //убрали выполненную зявку
+                const newDone = exe.сomplited.filter(val=> {
+                    return val.id !== route.params.id
+                })
+                console.log("NEWDONE", newDone);
+                //обновили профиль
+                await store.dispatch('update/updateDoneData', {
+                    сomplited: newDone,
+                    localId: localId.value
+                })
 
                 await store.dispatch('request/remove', route.params.id)
                 router.push({name: 'PrivateCabinet', params: {localId: localId.value}})
             }
 
-           
-
-            return {loading, request, currency, remove, status, date, amount, localId, executorsList
+            return {loading, request, currency, remove, status, date, amount, localId, executorsList, customerId
             }
         }
     }

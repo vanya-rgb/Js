@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar">
             <h3>Auction App</h3>
-            <ul class="navbar-menu">
+            <ul class="navbar-menu" v-if="windowWidth <= 900">
                 <li>
                     <router-link to="/">Заявки</router-link>
                 </li>
@@ -18,6 +18,14 @@
                     <a href="#" @click.prevent="logout">Выход</a>
                 </li>
             </ul>
+            <!-- <ul class="form-control navbar-menu">
+                <li>
+                    <input type="text">
+                </li>
+                <li>
+
+                </li>
+            </ul> -->
         </nav>
     </div>
 </template>
@@ -26,6 +34,7 @@
 import {useStore} from 'vuex'
 import {computed} from 'vue'
     export default {
+        props: ['windowWidth'],
         setup() {
             const store = useStore()
             const localId = computed(()=> store.getters['auth/localId'])

@@ -1,5 +1,6 @@
 import axios from '../../axios/request'
 import store from '../index'
+import {error} from '../../utils/error'
 // import {useRouter} from 'vue-router'
 // const router = useRouter()
 
@@ -25,7 +26,8 @@ export default {
                 const {data} = await axios.post(`/requests.json?auth=${token}`, payload)
                 console.log('DATA!', data);
                 console.log('PAYLOAD', payload);
-               commit('addRequest', {payload, id: data.name})
+                //добавление локально 
+               commit('addRequest', {...payload, id: data.name})
                 dispatch('setMessage', {
                     value: 'Заявка создана',
                     type: 'primary'
@@ -56,12 +58,12 @@ export default {
                 }
 
             } catch (e) {
-                console.log("ERROR IN RESPONSE DATA",e);
-                // if (e.response.data.error.code == 400) {
-                //     router.push('/auth?message=auth')
-                // }
+                if (e.response) {
+                    console.log(e.response)
+                }
+                console.log("!!!!", e.response.data.error);
                 dispatch('setMessage', {
-                    value: e.message,
+                    value: error(e.response.statusText),
                     type: 'danger'
                 }, {root: true})
             }
@@ -103,10 +105,10 @@ export default {
                 const token = store.getters['auth/token']
                 //Поиск по конкретному id
                 await axios.put(`/requests/${request.id}.json?auth=${token}`, request)
-                dispatch('setMessage', {
-                    value: 'Заявка обновлена',
-                    type: 'primary'
-                }, {root: true})
+                // dispatch('setMessage', {
+                //     value: 'Обновление успешно',
+                //     type: 'primary'
+                // }, {root: true})
             } catch (e) {
                 dispatch('setMessage', {
                     value: e.message,

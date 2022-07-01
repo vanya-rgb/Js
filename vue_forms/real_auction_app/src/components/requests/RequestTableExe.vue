@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 v-if="requests.length == 0" class="text-center">Заявок пока нет</h4>
+        <h4 v-if="!requests" class="text-center">Заявок пока нет</h4>
         <table v-else class="table"> 
             <thead>
                 <tr>

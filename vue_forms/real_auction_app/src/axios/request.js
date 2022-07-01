@@ -9,7 +9,7 @@ const requestAxios =  axios.create({
 requestAxios.interceptors.response.use(null, error => {
     //редирект при ошибке 401
     if (error.response.status == 401) {
-        router.push('/auth?message=auth')
+        router.push('/auth')
     }
     
     return Promise.reject(error);

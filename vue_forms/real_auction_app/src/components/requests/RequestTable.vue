@@ -1,26 +1,27 @@
 <template>
     <div>
         <h4 v-if="requests.length == 0" class="text-center">Заявок пока нет</h4>
-        <table v-else class="table"> 
+        <table v-else class="table">
+            <!-- center -->
             <thead>
                 <tr>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>Заказчик</th>
                     <th>Сумма</th>
                     <th>Deadline</th>
                     <th>Предмет</th>
-                    <th>Статус</th>
+                    <!-- <th>Статус</th> -->
                     <th>Действие</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(r, idx) in requests" :key="r.id">
-                    <td>{{idx + 1}}</td>
+                <tr v-for="r in requests" :key="r.id">
+                    <!-- <td>{{idx + 1}}</td> -->
                     <td>{{r.userName}}</td>
                     <td>{{currency(r.amount)}}</td>
                     <td>{{r.date}}</td>
                     <td>{{r.subject}}</td>
-                    <td><app-status :type="r.status"></app-status></td>
+                    <!-- <td><app-status :type="r.status"></app-status></td> -->
                     <td>
                         <router-link v-slot="{navigate}" custom :to="{name: 'Request', params: {id: r.id}}">
                             <button class="btn" @click="navigate">Открыть</button>
@@ -34,7 +35,7 @@
 
 <script>
 import {currency} from '../../utils/currency-formator'
-import AppStatus from '../ui/AppStatus.vue'
+// import AppStatus from '../ui/AppStatus.vue'
 // import AppStatus from '../ui/AppStatus.vue'
     export default {
         props: ['requests'],
@@ -42,7 +43,7 @@ import AppStatus from '../ui/AppStatus.vue'
             return {currency}
         },
         components: {
-            AppStatus
+            // AppStatus
         }
     }
 </script>

@@ -22,12 +22,12 @@
                     <td>
                         <div v-if="r.status == 'done'">
                             <router-link v-slot="{navigate}" custom :to="{name: 'RequestDone', params: {id: r.id}}">
-                            <button class="btn" @click="navigate" :disabled="r.status == 'in_progress'">Открыть</button>
+                            <button class="btn" @click="navigate">Открыть</button>
                         </router-link>
                         </div>
                         <div v-else>
                         <router-link v-slot="{navigate}" custom :to="{name: 'RequestCabinet', params: {id: r.id}}">
-                            <button class="btn" @click="navigate" :disabled="r.status == 'in_progress'">Открыть</button>
+                            <button class="btn" @click="navigate">Открыть</button>
                         </router-link>
                         </div>
                         

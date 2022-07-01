@@ -8,7 +8,8 @@ const routes = [
     component: ()=> import ('../views/HomePage.vue'),
     meta: {
       layout: 'main',
-      auth: true
+      auth: true,
+      title: 'Home'
     }
   },
   {
@@ -18,6 +19,16 @@ const routes = [
     meta: {
       layout: 'auth',
       auth: false
+    }
+  },
+  {
+    path: '/forgot',
+    name: 'Forgot',
+    component: () => import('../views/ForgotPage.vue'),
+    meta: {
+      layout: 'auth',
+      auth: false,
+      title: 'Forgot'
     }
   },
   {
@@ -98,6 +109,15 @@ const routes = [
     component: () => import('../views/HelpPage.vue'),
     meta: {
       layout: 'main',
+      auth: true
+    }
+  },
+  {
+    path: '/upload',
+    name: 'Upload',
+    component: () => import('../views/PhotoUpload.vue'),
+    meta: {
+      layout: 'auth',
       auth: true
     }
   },

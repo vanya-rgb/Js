@@ -7,7 +7,7 @@ export async function uploadFile(file, path) {
     console.log("File", file);
 	const storage = getStorage()
     console.log('PATH', path);
-    const storageRef = stRef(storage, 'files/'+ path +'/' +file.file.name)
+    const storageRef = stRef(storage, 'files/'+ path +'/' +file.name)
 
     const snapshot = await uploadBytes(storageRef, file.file)
     loadPhotoUrl.value = await getDownloadURL(snapshot.ref)
@@ -16,9 +16,11 @@ export async function uploadFile(file, path) {
 
     return {
         url:loadPhotoUrl.value,
-        size: file.file.size,
-        type: file.file.type,
-        name: file.file.name
+        // file: file.file,
+        id: file.id,
+        name: file.name,
+        size: file.size,
+        type: file.type
     }
 }
 
@@ -33,6 +35,6 @@ export default function createUploader(path) {
 		},
 		uploadFiles: function (files) {
 			return uploadFiles(files, path)
-		},
+		}
 	}
 }

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://192.168.3.18:8081/help -->
+<html lang="" style="--scroll-fixed-width:960px; --layout-width:960px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="http://192.168.3.18:8081/favicon.ico">
+    <title>Хоть поле и называется помощь, но сейчас помощь нужна мне. Оставь коментарий или замечание</title>
+  <script defer="" src="./Хоть поле и называется помощь, но сейчас помощь нужна мне. Оставь коментарий или замечание_files/chunk-vendors.js"></script><script defer="" src="./Хоть поле и называется помощь, но сейчас помощь нужна мне. Оставь коментарий или замечание_files/app.js"></script><style type="text/css">@import url(https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap);</style><style type="text/css">/* @import 'materialize-css/dist/css/materialize'; */
+
+* {
+    box-sizing: border-box;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+    margin: 10px;
+  }
+  
+  .hide {
+    visibility: hidden;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #42B983;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #42B983;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+#upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    outline: 2px dashed #5d5d5d;
+    outline-offset: -12px;
+    background-color: #e0f2f7;
+    font-family: 'Segoe UI';
+    color: #1f3c44;
+}
+#upload-container img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+}
+
+#upload-container div {
+    position: relative;
+    z-index: 10;
+}
+
+.wrapper  {
+    /* border: 5px solid #515151;
+    max-width: 300px;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffff;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px; */
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.wrapper input[type=file] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    position: absolute;
+    z-index: -10;
+}
+
+.wrapper img {
+    width: auto;
+    height: 100%;
+    image-rendering: auto;
+    /* flex-shrink: 0; */
+}
+
+.file-preview {
+    
+    /* flex-shrink: 0; */
+}
+
+.file-preview img {
+    width: 50px;
+    image-rendering: auto;
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    /* flex-shrink: 0; */
+}
+
+.wrapperList {
+    width: 570px;
+    max-height: 250px;
+    overflow-y: scroll;
+    background-color: #ffff;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.uploadImg{
+    width: 150px;
+    height: 150px;
+    margin-top: 50px;
+    margin-left: 200px;
+}
+
+.wrapperList input[type=file] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    position: absolute;
+    z-index: -10;
+}
+
+.upload-container.label {
+    font-weight: bold;
+}
+
+.upload-container.label:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+body {
+    font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    color: #2c3e50;
+    background: #2c3e50;
+    margin: 0;
+}
+
+hr {
+    margin: 1rem 0;
+}
+
+strong,
+.bold {
+    font-weight: 500;
+}
+
+ol,
+p,
+ul {
+    line-height: 1.7;
+}
+
+a {
+    color: #3eaf7c;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.65rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eaecef;
+}
+
+h3 {
+    font-size: 1.35rem;
+}
+
+.primary {
+     color: #42b983;
+     font-size: smaller;
+}
+
+/*.danger {*/
+/*    color: #e53935;*/
+/*} */
+
+.btn {
+    color: #42b983;
+    position: relative;
+    place-content: center;
+    place-items: center;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    border-radius: 99px;
+    letter-spacing: 0.05em;
+    border: 1px solid #42b983;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-right: 10px;
+    padding: 0.5rem 1.5rem;
+    white-space: nowrap;
+    font-weight: 700;
+    outline: none;
+    background: #fff;
+    transition: all 0.22s;
+}
+
+.btn:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 1!important;
+    background: #eee!important;
+    border-color: #ddd!important;
+    color: #999!important;
+}
+
+.btn:active {
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.btn.primary {
+    background: #42b983;
+    color: #fff;
+}
+
+.btn.danger {
+    background: #e53935;
+    color: #fff;
+    border-color: #e53935;
+}
+
+.btn.warning {
+    background: #c25205;
+    color: #fff;
+    border-color: #c25205;
+}
+
+.pt-2 {
+    padding-top: 2rem;
+}
+
+.pt-1 {
+    padding-top: 1rem;
+}
+
+.pt-5 {
+    padding-top: 5rem;
+}
+
+.form-control {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.form-control input,
+.form-control select,
+.form-control textarea{
+    font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
+    margin: 0;
+    outline: none;
+    border: 2px solid #ccc;
+    display: block;
+    width: 100%;
+    color: #2c3e50;
+    padding: 0.5rem 1.5rem;
+    border-radius: 3px;
+    font-size: 1rem;
+    resize: none;
+}
+.form-control.min input {
+    width: 50%;
+}
+
+.form-control small {
+    color: #e53935;
+}
+
+.form-control small .text-green{
+    color: #0ab939;
+}
+
+.form-control.invalid input {
+    border-color: #e53935;
+}
+
+.form-checkbox {
+    margin-bottom: 1rem;
+}
+
+.form-checkbox .label {
+    display: block;
+    margin: 0 0 0.3rem 0.3rem;
+    font-weight: 500;
+}
+
+.form-checkbox .checkbox input {
+    margin-right: 1rem;
+}
+
+.form-control label {
+    display: block;
+    margin: 0 0 0.3rem 0.3rem;
+    font-weight: 500;
+}
+
+.form-control input:active,
+.form-control input:focus {
+    transition: border 0.22s;
+    border: 2px solid #42b983;
+}
+
+.card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+    background: #fff;
+}
+
+.card.marked {
+    border: 4px solid #42b983;
+}
+
+.card.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    transition: .22s all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.list-item:hover {
+    background: #eee;
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-left-width: .5rem;
+    border-left-style: solid;
+    margin: 1rem 0;
+    position: relative;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.alert.primary {
+    border-color: #42b983;
+    background-color: #f8f8f8;
+}
+
+.alert.danger {
+    border-color: #e53935;
+    background-color: #f8f8f8;
+}
+
+.alert.warning {
+    border-color: #c25205;
+    background-color: #f8f8f8;
+}
+
+.alert p {
+    color: #222;
+    line-height: 1.7;
+}
+
+.alert-title {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: -.4rem;
+    color: #222;
+}
+
+.alert-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal {
+    position: fixed;
+    top: 60px;
+    height: 600px;
+    max-width: 700px;
+    width: 60%;
+    min-width: 400px;
+    padding: 1rem;
+    background: #fff;
+    z-index: 1000;
+    left: 50%;
+    border-radius: 10px;
+    transform: translateX(-50%);
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .35);
+    z-index: 100;
+}
+
+
+
+
+
+.loader {
+    font-size: 10px;
+    margin: 50px auto;
+    text-indent: -9999em;
+    width: 11em;
+    height: 11em;
+    border-radius: 50%;
+    background: #ffffff;
+    background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+    transform: translateZ(0);
+}
+.loader:before {
+    width: 50%;
+    height: 50%;
+    background: #ffffff;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+}
+.loader:after {
+    background: #2c3e50;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+@-webkit-keyframes load3 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes load3 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.navbar {
+    display: flex;
+    padding: 0 2rem;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eaecef;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+}
+
+.navbar-menu li {
+    margin-right: 2rem;
+}
+
+.navbar-menu li a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.navbar-menu li a:hover, .navbar-menu li a.active {
+    border-bottom: 2px solid #3eaf7c;
+}
+
+.navbar-menu .content:hover {
+    color: #3eaf7c;
+    cursor: pointer;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge {
+    font-size: 0.8rem;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 0 .5rem;
+}
+
+.badge.cursor {
+    cursor: pointer;
+}
+
+.badge.primary {
+    border-color: #3eaf7c;
+    color: #3eaf7c;
+}
+.badge.attention {
+    border-color: #df4a0a;
+    color: #df4a0a;
+}
+
+.badge.danger {
+    border-color: #e53935;
+    color: #e53935;
+}
+
+.badge.warning {
+    border-color: #d0a30e;
+    color: #d0a30e;
+}
+
+.badge.disabled {
+    cursor: not-allowed;
+    opacity: 1!important;
+    background: #eee!important;
+    border-color: #ddd!important;
+    color: #999!important;
+}
+
+.text-white {
+    color: #fff;
+}
+.text-green {
+    color: rgb(19, 200, 47);
+}
+
+.text-danger {
+    color: #e53935;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text {
+    font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
+    font-size: 1rem;
+    resize: none;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1200px;
+    
+}
+
+.container.with-nav {
+    margin-top: 70px;
+}
+
+.sidebar-page {
+    /* margin-top: 50px; */
+    /* position: relative; */
+    /* width: 1200px; */
+    /* height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0; */
+    /* overflow-y: scroll;
+    overflow-x: scroll; */
+    /* background: #ccc; */
+    /* z-index: 100; */
+    /* padding: .5rem; */
+    /* position: fixed; */
+}
+
+.left-col {
+    /* position: relative; */
+    padding: 1rem;
+    width:20%;
+}
+
+.right-col {
+    width: 80%;
+}
+
+.sc {
+    background-color: #ccc;
+    border-radius: 15px;
+}
+
+.sc-modal {
+    position: absolute;
+    left: 50%;
+    padding-bottom: 20px;
+    width: 90%;
+    transform: translateX(-50%);
+}
+
+/* .table { */
+    /* margin-left: 1rem;
+    margin-right: 1rem;
+} */
+
+.table.min {
+    margin-bottom: 20px;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.table tr {
+    padding: .5rem 1rem;
+    /* display: contents; */
+}
+
+.table th {
+    padding: .5rem 1vw;
+}
+
+.table td {
+    padding: .5rem 1vw;
+}
+
+.table tbody thead {
+    text-align: center;
+}
+
+.table tbody tr:hover {
+    background: #eee;
+}
+
+.breadcrumbs {
+    margin-bottom: .5rem;
+}
+
+.filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filter > div {
+    margin-right: 2rem;
+    width: 30%;
+    margin-bottom: 0;
+}
+
+
+.sidebar-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.close-icon {
+    width: 20px;
+    height: 20px;
+    /* position: absolute;
+    right: 10px; */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.question {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.question:hover {
+    cursor: pointer;
+    background: #eee;
+}
+
+.question-title {
+    font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}</style></head>
+  <body cz-shortcut-listen="true">
+    <noscript>
+      <strong>We're sorry but  doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app" data-v-app=""><div><div><div><nav class="navbar"><h3>Auction App</h3><ul class="navbar-menu"><li><a href="http://192.168.3.18:8081/" class="">Заявки</a></li><li><a href="http://192.168.3.18:8081/help" class="active" aria-current="page">Помощь</a></li><li><a href="http://192.168.3.18:8081/B93zcJe4faM1pXKhXo5VUC0pmIs2" class=""> Личный кабинет </a></li><li><a href="http://192.168.3.18:8081/help#">Выход</a></li></ul></nav></div><div class="container with-nav"><!--v-if--><div><div><!--v-if--><div class="sc"><tr><td class="left-col"><aside><p>Экономьте электричество</p><p>2133</p><p>Чья палка больше</p></aside></td><td class="right-col"><div class="card"><h1 class="card-title">Хоть поле и называется помощь, но сейчас помощь нужна мне. Оставь коментарий или замечание </h1><div class="form-control"><textarea rows="3" cols="40"></textarea></div><button class="btn" style="margin-bottom: 20px;">Отправить послание</button><div><div class="card">Кроме поля прикрепления файлов в создании завки, там все плохо(</div></div><div><div class="card">ну и выполненные заявки косячные</div></div><div><div class="card">когда много файлов добавляю не могу опустить экран вниз, приходится уменьшать страничку, трачу на создание заявки на 0.001 секунду дольше, чем могла бы хахаха</div></div><div><div class="card">понял принял)
+</div></div><div><div class="card">статус заказа выполнен, а файлов прикреплённых нет, не порядки</div></div><div><div class="card">Автор крутой! </div></div><div><div class="card">при создании заявки в строке "Выберите(или перетищите) файл" ошибка в слове перетащите</div></div><div><div class="card">сделанные заявки не суммируются, после назначения сумма должна быть равная запрошенной исполнителем</div></div><div><div class="card">выполненная работа:
+-нет исполнителя
+-ники не кликабельны</div></div><div><div class="card">!!!запись файлов при cоздании заявки делать /files/user ID/app ID/
+чтобы избежать повторения в названиях
+</div></div><div><div class="card">ошибки при валидации полей на /auth</div></div><div><div class="card">Короч
+Все выполненные заявки хранятся в request
+Содержит в себе все файлы а также информацию о заказчике и об исполнителе
+В профиле исполнителя информация только об исполняемых им завках и все</div></div><div><div class="card">Также все моменты с обновлением данных должны представлять собой одну аккуратную функцию куда мы просто передаём новые данные</div></div></div></td></tr></div></div></div></div></div></div></div>
+    <!-- built files will be auto injected -->
+  
+
+</body></html>

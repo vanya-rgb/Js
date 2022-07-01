@@ -21,13 +21,14 @@ import {ref, watch} from 'vue'
             const classMap = {
                 active: 'primary',
                 in_progress: 'attention',
+                on_inspection: 'warning',
                 done: 'danger',
                 pending: 'warning'
-                
             }
             const textMap = {
                 active: 'Активна',
                 in_progress: 'Выполняется',
+                on_inspection: 'На проверке',
                 done: 'Выполнена',
                 pending: 'Ожидает'
             }

@@ -1,11 +1,10 @@
 <template>
-    <div>
+    
         <div>
-        <span>{{timer.minutes}}</span>:<span>{{timer.seconds}}</span>
+        <time>{{timer.minutes}}м {{timer.seconds}}с</time>
         </div>
         <!-- <p>{{timer.isRunning ? 'Running' : 'Not running'}}</p> -->
-        
-    </div>
+
 </template>
 
 <script>

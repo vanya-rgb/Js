@@ -14,7 +14,12 @@ export async function removeFile(file, path) {
 }
 
 export function removeFiles(files, path) {
-	return Promise.all(files.map((file) => removeFile(file, path)))
+	// if (files.length == 1) {
+	// 	return removeFile(files, path)
+	// } else {
+		console.log("remover", files);
+		return Promise.all(files.map((file) => removeFile(file, path))) 
+	
 }
 
 export default function createRemover(path) {
