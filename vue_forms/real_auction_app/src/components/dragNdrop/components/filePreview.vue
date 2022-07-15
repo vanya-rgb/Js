@@ -9,7 +9,7 @@
 				<td class="short-text">
 						<a :href="file.url" target="_blank">{{file.name}}</a>
 					</td>
-				<td>
+				<td v-if="!hide">
 					<img :src="iconLink" @click="$emit('remove', file)" >
 				</td>
 			</tr>
@@ -34,6 +34,10 @@ import AppIcon from '@/components/ui/AppIcon.vue'
 			type: Number,
 			required: false
 		},
+		hide: {
+			type: Boolean,
+			required: false
+		}
 	},
 	setup() {
 		const mainId = process.env.BASE_URL

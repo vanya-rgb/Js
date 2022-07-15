@@ -6,18 +6,16 @@
             <div class="breadcrumbs">
             <router-link :to="{name: 'PrivateCabinet', params: {localId}}">Обратно на страницу</router-link>
             </div>
-            <app-page title="Заявка">
-                <p><strong>&nbsp;Status</strong>: <app-status :type="request.status"></app-status></p>
+            <app-page title="Редактор заявки">
+                <p><strong>Заявка&nbsp;</strong><app-status :type="request.status"></app-status></p>
 
-                <p><strong>&nbsp;Ник</strong>: {{request.userName}}</p>
-
-                <div class="form-control">
-                    <label for="amount">Сумма:</label>
+                <div class="form-control" v-if="status != 'in_progress'">
+                    <label for="amount">Изменить сумму:</label>
                     <input type="number" id="amount" v-model.number="amount">
                 </div>
 
                 <div class="form-control">
-                    <label for="date">Deadline</label>
+                    <label for="date">Крайний срок исполнения:</label>
                     <input type="date" :min="new Date().toISOString().split('T')[0]" id="date" v-model="date">
                 </div>
 
@@ -40,7 +38,8 @@
                             :key="file.id"
                             :file="file"
                             :idx = "idx"
-                            tag="ul" @remove="(file)=> {
+                            tag="ul"
+                            @remove="(file)=> {
                                 hasChanges = true
                                 removeFile(file)
                             }"></file-preview>
@@ -52,36 +51,44 @@
                 </div>
 
                 <div class="form-control">
-                    <label for="description">Описание</label>
+                    <label for="description">Описание:</label>
                     <textarea name="textarea" id="description"
                     v-model="description" required></textarea>
                 </div><br>
-
-                <button class="btn danger" @click="remove">Удалить заявку</button>
+<!-- !!!! -->
+                <button class="btn danger"
+                v-if="status != 'in_progress'"
+                @click="remove">Удалить заявку</button>
                 <button v-if='hasChanges' class="btn"
                 @click="update"
                 :disabled = "files.length == 0"
                 >Обновить</button>
+<!-- !!!! -->
             </app-page>
             </div>
             <h3 v-else class="text-center text-white">
                 Заявки с ID = {{$route.params.id}} нет.
             </h3>
 
-            <app-page title="Предложившие помощь" >
+            <div v-if="status == 'active' || status == 'pending'">
+            <app-page title="Предложившие помощь:" >
                 <table class="table" v-if="executorsList.length !== 0">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th></th>
+                            <th></th>
                             <th>Исполнитель</th>
                             <th>Рейтинг</th>
                             <th>Сумма</th>
-                            <th>Выбрать</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(r, idx) in executorsList" :key="r.id">
-                            <td>{{idx+1}}</td>
+                            <td>{{idx+1}}.</td>
+                            <td>
+                                <img class="wrapper" :src="r.photo.miniature" alt="">
+                            </td>
                             <td>
                                 <div>
                                     <router-link v-slot="{navigate}" custom :to="{name: 'UserPage', params: {userId: r.localId}}">
@@ -89,14 +96,22 @@
                                     </router-link>
                                 </div>
                             </td>
-                            <td>{{r.rating.value}}/{{r.rating.count}}</td>
+                            <td class="stars">
+                            <star-rating
+                            :styleStarWidth = 24
+                            :styleStarHeight = 24
+                            :isIndicatorActive = false
+                            :value = r.rating.value
+                            :amount = r.rating.count></star-rating>
+                            </td>
                             <td>{{currency(r.amount)}}</td>
                             <td><button class="btn" @click="choosePerformer(r)">Назначить</button></td>
                         </tr>
                     </tbody>
                 </table>
-                <app-page class="text-center" v-else><h3>Пока никто не вызвался:(</h3></app-page>
+                <div class="text-center" v-else><h3>Пока никто не вызвался:(</h3></div>
             </app-page>
+            </div>
         </div>
     </div>
 </template>
@@ -116,10 +131,11 @@ import DropZone from '@/components/dragNdrop/components/dropZone.vue'
 import filePreview from '@/components/dragNdrop/components/filePreview.vue'
 import createUploader from '@/components/dragNdrop/composition/file-uploader'
 import {dateFormator} from '../utils/date-formator'
+import StarRating from '../utils/star-rating.vue'
 
     export default {
         components: {
-            AppPage, AppLoader, AppStatus, DropZone, filePreview
+            AppPage, AppLoader, AppStatus, DropZone, filePreview, StarRating
         },
         setup() {
             const loading = ref(true)
@@ -135,6 +151,7 @@ import {dateFormator} from '../utils/date-formator'
             const pathRandom = ref()
             const file = ref([])
             const filesAtStart = ref([])
+            //условия обновления
             //
             const executorsList = ref([])
             const hasChanges = ref(false)
@@ -147,6 +164,7 @@ import {dateFormator} from '../utils/date-formator'
 
             const {files, addFiles, removeFile, addFileDirect, message} = useFileList()
 
+
             onMounted(async()=> {
                 loading.value = true
                 localId.value = store.getters['auth/localId']
@@ -154,7 +172,7 @@ import {dateFormator} from '../utils/date-formator'
                 request.value = await store.dispatch('request/loadById', route.params.id)
                 //заполение статуса
                 status.value = request.value?.status
-                date.value = request.value?.date
+                date.value = request.value?.dateSort
                 file.value = request.value?.files
                 amount.value = request.value.amount
                 description.value = request.value.description
@@ -248,27 +266,33 @@ import {dateFormator} from '../utils/date-formator'
                     console.log("toRecord", toRecord);
                 
                 //получили объект
-                const data = {...request.value, date: dateFormator(new Date(date.value)), amount: amount.value,  id:route.params.id, status: status.value, files: toRecord, description: description.value}
+                const data = {...request.value, date: dateFormator(new Date(date.value)), dateSort: date.value, amount: amount.value,  id:route.params.id, status: status.value, files: toRecord, description: description.value}
                 //обновили в базе
                 await store.dispatch('request/update', data)
 
-                window.location.reload()
+                // window.location.reload()
 
                 // router.push({name: 'PrivateCabinet', params: {localId: localId.value}})
+                //убрали кнопку обновить
+                hasChanges.value = false
                 // //обновили локально
-                // request.value.date = date.value
+                request.value = data
+                loading.value = false
             }
 
             const choosePerformer = async(executor) => {
+                loading.value = true
                 console.log("LOCAL", executor);
                 status.value = 'in_progress'
                 executorsList.value = []
 
-                const data = {...request.value, id:route.params.id, status: status.value, executorsList: executorsList.value, performer: executor}
+                const data = {...request.value, id:route.params.id, status: status.value, executorsList: executorsList.value, performer: executor, amount: executor.amount}
                 //обновили в базе
                 await store.dispatch('request/update', data)
 
-                router.push({name: 'PrivateCabinet', params: {localId: localId.value}})
+                request.value = data
+                // router.push({name: 'PrivateCabinet', params: {localId: localId.value}})
+                loading.value = false
 
             }
             //удаление из базы данных

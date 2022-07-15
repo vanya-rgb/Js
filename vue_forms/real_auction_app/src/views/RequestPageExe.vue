@@ -6,35 +6,43 @@
         <div class="breadcrumbs">
             <router-link :to="{name: 'PrivateCabinet', params: {localId}}">К списку заявок</router-link>
         </div>
-        <app-page title="Заявка" v-if="request">
-            <p><strong>Status</strong>: <app-status :type="status"></app-status></p>
-            <div v-if="localId !== userLocalId">
-                <router-link v-slot="{navigate}" custom :to="{name: 'UserPage', params: {userId: userLocalId}}">
-                    <p><strong>Заказчик</strong>: <a @click="navigate">{{userName}}</a></p>
-                </router-link>
+        <app-page v-if="request">
+
+            <router-link v-slot="{navigate}" custom :to="{name: 'UserPage', params: {userId: userLocalId}}">
+                <h2>Заказчик:
+                    <a @click="navigate">{{userName}}</a>
+                </h2>
+            </router-link>
+
+            <p><app-status :type="status"></app-status></p>
+            
+            <p><strong>Сумма: {{currency(amount)}}</strong></p>
+            <p><strong>Срок заявки истекает&nbsp;{{deadline}}</strong></p>
+            <p><strong>
+                Описание:&nbsp;{{descriptionCast}}
+            </strong></p>
+            
+            <h3>Файлы заказчика:</h3>
+            <div class="highlight" v-if="filesList">
+                <file-preview v-for="(file, idx) in filesList"
+                    :key="file.id"
+                    :file="file"
+                    :idx = "idx"
+                    :hide = "true"
+                    tag="ul"
+                >
+                </file-preview>
             </div>
-            <div v-else>
-                <router-link v-slot="{navigate}" custom :to="{name: 'PrivateCabinet', params: {localId}}">
-                    <p><strong>Заказчик</strong>: <a @click="navigate">{{userName}}</a></p>
-                </router-link>
-            </div>
-            <p><strong>Сумма</strong>: {{currency(amount)}}</p>
-            <p><strong>Файлы заказчика</strong></p>
-            <table class="table min file-preview" v-if="filesList">
-                <tr v-for="r in filesList" :key="r.id">
-                    <app-icon
-                        :type="r.type"
-                        :url="r.url"
-                        :name="r.name"
-                    ></app-icon>
-                </tr>
-            </table>
+
             <div class="form-control">
-                <label for="file-input" class="upload-container label form-control">Дать ответ на задание</label>
+                <label for="file-input">
+                    <h2 v-if="files.length == 0">Дать ответ на задание</h2>
+                    <h2 v-else>Добавить файл</h2>
+                </label>
                 <span>.jpg, .jpeg, .png, .docx, .doc, .pdf, .xlsx, .pptx</span><br>
                 <span>размер файла не должен превышать 3 МБ</span><br>
                 <small v-if="message">{{message}}</small>
-                <drop-zone class="wrapperList" @files-dropped="onDrop">
+                <drop-zone class="wrapperList uploadBorder" @files-dropped="onDrop">
                     <input
                         id="file-input"
                         type="file"
@@ -43,12 +51,22 @@
                         multiple
                         @change="onChange">
                     <div v-if="files.length > 0">
-                        <file-preview v-for="file of files" :key="file.id" :file="file" tag="ul" @remove="removeFile"></file-preview>
+                        <file-preview v-for="(file, idx) of files" :key="file.id"
+                        :file="file"
+                        :idx = "idx"
+                        tag="ul" @remove="removeFile"></file-preview>
                     </div>
                     <div v-else>
-                        <img class="uploadImg" :src="mainRoad +'upload.jpg'" alt="">
+                        <label for="file-input"><img class="uploadImg" :src="mainRoad +'upload.png'" alt=""></label>
                     </div>
                 </drop-zone>
+            </div>
+
+            <div class="form-control">
+                <label for="description">Коментарии к ответу</label>
+                <textarea name="description" id="description" rows="10"
+                v-model="description"
+                ></textarea>
             </div>
             <!-- //прикрепить новые сделанные -->
             <button class="btn danger" @click="upload" :disabled="!(files.length > 0)">Отправить работу</button>
@@ -73,11 +91,10 @@ import useFileList from '../components/dragNdrop/composition/file-list'
 import DropZone from '../components/dragNdrop/components/dropZone.vue'
 import FilePreview from '../components/dragNdrop/components/filePreview.vue'
 import createUploader from '../components/dragNdrop/composition/file-uploader'
-import AppIcon from '@/components/ui/AppIcon.vue'
 
     export default {
         components: {
-            AppPage, AppLoader, AppStatus, DropZone, FilePreview, AppIcon
+            AppPage, AppLoader, AppStatus, DropZone, FilePreview
         },
 
         setup() {
@@ -98,10 +115,14 @@ import AppIcon from '@/components/ui/AppIcon.vue'
             const userLocalId = ref()
             const localId = ref()
             const amount = ref()
+            const deadline = ref()
+            //описание от исполнителя
+            const description = ref()
+            //описание от заказчика
+            const descriptionCast = ref()
+
             const filesList = ref([])
-            const filesListExe = ref([])
-            const executorsList = ref([])
-            const offerAmount = ref()
+
             const mainRoad = ref()
             const pathRandom = ref()
             
@@ -120,15 +141,18 @@ import AppIcon from '@/components/ui/AppIcon.vue'
                 // executorName.value = userDbData.userName
                 // rating.value = userDbData.rating
                 // photo.value = userDbData.photo
+                console.log("reqyest", request.value);
                 pathRandom.value = request.value.pathRandom
                 status.value = request.value.status
                 amount.value = request.value.amount
                 //заказчик
                 userName.value = request.value.userName
+                descriptionCast.value = request.value.description
+                deadline.value = request.value.date
                 //файлы заказчика
                 filesList.value = request.value.files
                 //проверка наличия выполненных файлов
-                request.value.filesExe ? filesListExe.value = request.value.filesExe : filesListExe.value = []
+                // request.value.filesExe ? filesListExe.value = request.value.filesExe : filesListExe.value = []
 
                 userLocalId.value = request.value.localId
                 // request.value.executorsList ? executorsList.value = request.value.executorsList : executorsList.value = []
@@ -150,46 +174,24 @@ import AppIcon from '@/components/ui/AppIcon.vue'
             }
 
             const upload = async()=> {
-                
+                loading.value = true
                 const { uploadFiles } = createUploader(`${userLocalId.value}/${pathRandom.value}-done`)
+
                 const filesExe = await uploadFiles(files.value)
-                const data = {...request.value, id:route.params.id, status: 'on_inspection', filesExe: filesExe}
+                console.log('filexEXE', filesExe);
+                const data = {...request.value, id:route.params.id, status: 'on_inspection', filesExe: filesExe, descriptionExe: description.value}
                 //обновили в базе
                 await store.dispatch('request/update', data)
-                // //получили юзера
-                // const exe = await store.dispatch('user/getUserData', localId.value)
-                // //убрали выполненную зявку
-                // const newExe = exe.toComplite.filter(val=> {
-                //     return val.id !== route.params.id
-                // })
-                // //список ранее выполненных
-                // let oldExe = []
-                // exe.сomplited ? oldExe = exe.сomplited : oldExe = []
-                // //та самая выполненная заявка
-                // const beforeExe = exe.toComplite.find(val=> {
-                //     return val.id == route.params.id
-                // })
-                // oldExe.push(beforeExe)
-                // //обновили профиль
-                // await store.dispatch('update/updateExeData', {
-                //     toComplite: newExe,
-                //     сomplited: oldExe,
-                //     status: 'done',
-                //     localId: localId.value
-                // })
+               
                 router.push({name: 'PrivateCabinet', params: {localId: localId.value}})
+                loading.value = false
 
             }
 
-            //проверка что заявка уже взята пользователем
-            // const alreadyExist = computed(()=>
-            //     executorsList.value.find(item =>
-            //         item.localId == localId.value
-            //     )
-            // )
+            
 
-            return {loading, currency, upload, status, amount, offerAmount, userName, request, filesList, userLocalId, localId, executorsList, rating,
-            removeFile, onChange, onDrop, files, message, mainRoad, filesListExe
+            return {loading, currency, upload, status, amount, userName, request, filesList, userLocalId, localId, rating,
+            removeFile, onChange, onDrop, files, message, mainRoad, description, descriptionCast, deadline
             }
         }
     }

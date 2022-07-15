@@ -4,18 +4,23 @@
         <app-page v-else>
             <div v-if="isExist">
             <div>
-                <h1>{{userName}}</h1>
+                <h1 style="margin-left: 40px;">{{userName}}</h1>
             <the-castom
                 :localId = "localId"
                 @createReq = "modalCreate = true"
                 @findUser = "modalFind = true"
             ></the-castom>
             <teleport to="body">
-                <app-modal v-if="modalCreate" @close="modalCreate = false">
+                <app-modal v-if="modalCreate"
+                :height = "'600px'"
+                @close="modalCreate = false">
                     <request-modal
                     @created="modalCreate  = false"></request-modal>
                 </app-modal>
-                <app-modal v-else-if="modalFind" title="Кого ищем?" @close="onFindUserClose">
+                <app-modal v-else-if="modalFind" 
+                title="Кого ищем?"
+                :height = "'400px'"
+                @close="onFindUserClose">
                     <requests-users></requests-users>
                 </app-modal>
             </teleport>
@@ -33,30 +38,46 @@
                             </div>
                             </div>
                         </div>
-                        <app-modal v-if="changePhoto" @close="changePhoto = false">
+                        <app-modal v-if="changePhoto"
+                        :height="'570px'"
+                        @close="changePhoto = false">
                             <request-new-avatar @created="changePhoto = false"
                             @forceRerender = "(n)=> photo.link = n"
                             ></request-new-avatar>
                         </app-modal>
 
                         <app-email :isVerify="isVerifiedEmail" @verifyEmail="verifyEmail"
-                            :email="email"
-                        ></app-email>
-                        <tr class="align-left"><th>Номер:</th><td>{{phone}}</td></tr>
-                        <tr class="align-left"><th>Рейтинг:</th><td>{{rating.value}}</td></tr>
-                        
+                        :email="email"
+                        ></app-email><br>
+                        <tr class="align-left display">
+                            <th>Номер</th>
+                            <td v-if="phone">{{phone}}</td>
+                            <td v-else>8-800-555-35-35</td>
+                        </tr><br><br>
+                        <tr class="stars">
+                            <star-rating
+                            :value = rating.value
+                            :amount = rating.count></star-rating>
+                        </tr>
+
                     </div>
                 </td>
-                <td style="vertical-align: top;">
-                    <tr>
-                        <td>фото</td>
-                        <td>
-                            <tr>ник</tr>
-                            <tr>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse rem a, aspernatur totam dolorem fuga ipsam molestias in eaque deleniti autem eligendi, provident vel delectus.</tr>
-                            <!-- <tr class="align-left" v-for="(com, idx) in comments" :key="idx">
-                            </tr> -->
-                        </td>
-                    </tr>
+                <td class="commentsColl">
+                    <div class="details">
+                    <!-- <details> -->
+                        <summary
+                        >Комментарии ({{commentsCount}})</summary>
+                        <RequestComentList
+                        :request = "comments"
+                        v-if="comments.length > 0"
+                        ></RequestComentList>
+                        <tr v-else>
+                            <p>Комментарии появляются когда вы заказываете или выполняете заявки.</p>
+                            <br>
+                            <img src="cometnsPhoto.png" alt="">
+                        </tr>
+                    </div>
+                    <!-- </details> -->
                 </td>
             </tr>
             
@@ -64,20 +85,29 @@
             </div>
             </div>
             <div class="card">
-                <h1>Список моих заявок</h1>
-                <request-filter-cabinet v-model="filter"></request-filter-cabinet>
-                <request-table-cabinet :requests="requests"></request-table-cabinet>
+                <details open>
+                    <summary>Список моих заявок</summary>
+                    <br>
+                    <request-filter-cabinet v-model="filter"></request-filter-cabinet>
+                    <request-table-cabinet :requests="requests"></request-table-cabinet>
+                </details>
             </div>
-            <!-- <app-page title = "Список моих заявок">
-                
-            </app-page> -->
+
             <div class="card">
-                <h1>Выполняемые заявки</h1>
-                <request-table-exe :requests="requestsToComplite"></request-table-exe>
+                <details>
+                    <br>
+                    <summary>Выполняемые заявки</summary>
+                    <request-table-exe :requests="requestsToComplite"></request-table-exe>
+                </details>
             </div>
+
             <div class="card">
-                <h1>Выполненные заявки</h1>
-                <request-table-done :requests="сomplited"></request-table-done>
+                <details>
+                    <summary>История заявок</summary>
+                    <br>
+                    <request-filter-done v-model = "filterDone"></request-filter-done>
+                    <request-table-done :requests="requestsComplited"></request-table-done>
+                </details>
             </div>
             </div>
             <div v-else>
@@ -103,13 +133,16 @@
     import RequestModal from '@/components/requests/RequestModal.vue'
     import RequestNewAvatar from '@/components/requests/RequestNewAvatar.vue'
     import RequestFilterCabinet from '../components/requests/RequestFilterCabinet.vue'
+    import RequestFilterDone from '@/components/requests/RequestFilterDone.vue'
     import RequestTableCabinet from '@/components/requests/RequestTableCabinet.vue'
     import RequestTableExe from '@/components/requests/RequestTableExe.vue'
     import RequestTableDone from '@/components/requests/RequestTableDone.vue'
+    import RequestComentList from '@/components/requests/RequestComentsList.vue'
+    import StarRating from '../utils/star-rating.vue'
 
     export default {
         components: {
-            AppLoader, AppPage, AppEmail, TheCastom, AppModal, RequestsUsers, RequestModal, RequestFilterCabinet, RequestTableCabinet, RequestTableExe, RequestTableDone, RequestNewAvatar
+            AppLoader, AppPage, AppEmail, TheCastom, AppModal, RequestsUsers, RequestModal, RequestFilterCabinet, RequestTableCabinet, RequestTableExe, RequestTableDone, RequestNewAvatar, RequestComentList, StarRating, RequestFilterDone
         },
         data() {
             return {
@@ -123,6 +156,7 @@
         },
         setup() {
             const loading = ref(true)
+            // const loadingCom = ref(false)
             const modalCreate = ref(false)
             const modalFind = ref(false)
             const isExist = ref(true)
@@ -131,7 +165,9 @@
             const userName = ref()
             const email = ref()
             const localId = ref()
+
             const comments = ref([])
+            const commentsCount = ref()
             const phone = ref('Неизвестно')
             const photo = ref({
                 link: "upload.png",
@@ -139,10 +175,11 @@
             })
             //заявки
             // const toComplite = ref([])
-            // const сomplited = ref([])
             const rating = ref({})
+            const score = ref()
             //filter
             const filter = ref({})
+            const filterDone = ref({})
             // const localId = ref()
             const isVerifiedEmail = ref(false)
             // const data = ref()
@@ -158,7 +195,7 @@
             const requests = computed(()=> store.getters['request/requests']
             .filter(request => {
                 if (request.localId){
-                return localId.value === request.localId
+                return localId.value === request.localId &&request.status != 'done'
                 }
                 // return request
             })
@@ -169,17 +206,44 @@
                 return request
             })
             .sort((a, b)=>{
-                return new Date(a.date) - new Date(b.date)
+                return new Date(a.dateSort) - new Date(b.dateSort)
             })
             )
 
             const requestsToComplite = computed(()=> store.getters['request/requests']
             .filter(request => {
                 if (request.performer){
-                return localId.value === request.performer.localId
+                return localId.value === request.performer.localId && request.status != 'done'
                 }
                 // return request
             }))
+
+            const requestsComplited = computed(()=> store.getters['request/requests']
+            .filter(request => {
+                if (request) {
+                    return request.status == 'done'
+                }
+            })
+            .filter(request => {
+                const condition = filterDone.value.filter
+                if (condition) {
+                    if (condition == 'exe') {
+                        return localId.value === request.performer.localId
+                    } else if (condition == 'castomer') {
+                        return localId.value === request.localId
+                    }
+                } else {
+                    return request
+                }
+            }))
+
+            // .filter(request => {
+                
+            //     if (request.performer){
+            //     return localId.value === request.performer.localId && request.status == 'done'
+            //     }
+            //     // return request
+            // }))
 
             const verifyEmail = async()=> await store.dispatch('user/verifyEmail', email.value)
             console.log(process.env.BASE_URL);
@@ -189,6 +253,7 @@
                 const req =  await store.getters['request/requests']
                 console.log("req", req);
                 const user = await store.dispatch('user/getUserData', localId.value)
+                comments.value = await aboutComentators(user.comments)
 
                 const registrData = await store.dispatch('user/getProfile')
                 const registrDataUser = registrData.users[0]
@@ -196,6 +261,8 @@
                 await store.dispatch('request/load')
 
                 if (user !== null) {
+                    
+                    console.log("COVALUe", comments.value)
                     console.log("USER", user);
                     console.log("DOC", registrDataUser);
                     userName.value = user.userName
@@ -203,9 +270,13 @@
                     localId.value = user.localId
                     phone.value = user.phone
                     photo.value = user.photo
-                    comments.value = user.comments
+                    commentsCount.value = user.comments.length
                     rating.value = user.rating
+                    const num = user.rating.value/user.rating.count
+                    isNaN(num) ? score.value = 0 : score.value = num.toFixed(2)
+
                     isVerifiedEmail.value = registrDataUser.emailVerified
+                    //инфа про коментаторов
                     // //заявки на исполнение
                     // user.toComplite ? toComplite.value = user.toComplite : toComplite.value = []
                     // //исполненные заявки
@@ -220,27 +291,65 @@
                     isExist.value = false
                 }
                 const sources = [
-                    photo.value?.link,
-                    ]
-                    preload(sources, (completed) => {
-                        if (completed === true) {
+                    photo.value?.link
+                ]
+                preload(sources, (completed) => {
+                    if (completed === true) {
                         loading.value = false
                     }
                 })
             })
             
+            const aboutComentators = async(about) => {
+                // loadingCom.value = true
+                let arr = []
+                about.forEach(async(item) => {
+                    const user = await store.dispatch('user/getUserData', item.user)
+                    arr.push({
+                        userName: user.userName,
+                        photo: user.photo.miniature,
+                        text: item.text,
+                        score: item.score,
+                        localId: item.user
+                    })
+                })
+                console.log("LIst", arr);
+                return arr
+                // loadingCom.value = false
+                
+                
+            }
 
             return {
-                loading, userName, email, photo, phone, localId, rating, comments, verifyEmail, isVerifiedEmail, modalCreate, modalFind, onFindUserClose, requests, filter, isExist,  changePhoto, requestsToComplite
+                loading, userName, email, photo, phone, localId, rating, comments, verifyEmail, isVerifiedEmail, modalCreate, modalFind, onFindUserClose, requests, filter, isExist,  changePhoto, requestsToComplite, requestsComplited, commentsCount, score, filterDone
             }
-            // requestsToComplite, requestsComplited,
+            // requestsToComplite, requestsComplited,, 
         }
         
     }
 
 </script>
 
-<style>
+<style scoped>
+
+.stars {
+
+}
+
+#i{
+  color: #ec9801;
+}
+
+table {
+    width: 100%;
+}
+.display {
+    display: inline-grid;
+}
+
+.margin-top{
+    margin-top: 1rem;
+}
   .effect {
   position: relative;
   width: 256px;
@@ -276,4 +385,26 @@
   display: block;
   margin: 140px auto;
 }
+
+.details{
+  overflow:auto;
+  display:block;
+  margin-bottom: 1.5rem;
+  width:100%;
+}
+
+summary {
+   /* display:block; */
+   padding: .3em 1em .3em .9em;
+   border-bottom: 1px solid #e2e8f0;
+   font-size:1.4em;
+   cursor: pointer;
+   position: relative;
+}
+
+summary ~ * {
+   padding: 0 1em 10px 1.4em;
+}
+
+
 </style>

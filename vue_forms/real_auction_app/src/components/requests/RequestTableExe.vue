@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 v-if="!requests" class="text-center">Заявок пока нет</h4>
+        <h4 v-if="requests.length == 0" class="text-center">Заявок пока нет</h4>
         <table v-else class="table"> 
             <thead>
                 <tr>
@@ -21,7 +21,9 @@
                     <td><app-status :type="r.status"></app-status></td>
                     <td>
                         <router-link v-slot="{navigate}" custom :to="{name: 'RequestExe', params: {id: r.id}}">
-                            <button class="btn" @click="navigate">Открыть</button>
+                            <button class="btn" @click="navigate"
+                            :disabled = 'r.status == "on_inspection"'
+                            >Открыть</button>
                         </router-link>
                     </td>
                 </tr>

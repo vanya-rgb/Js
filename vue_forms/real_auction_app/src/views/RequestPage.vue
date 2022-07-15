@@ -16,7 +16,7 @@
                     <strong>Заказчик&nbsp;<a @click="navigate">{{userName}}</a>&nbsp;готов заплатить {{currency(amount)}} за этот заказ.</strong>
                 </router-link>
             </div>
-            <p><strong>Необходимо выполнить заявку до {{deadline}} включительно. <br>Что делать за просрок напиши пожалйста в разделе "помощь".</strong></p>
+            <p><strong>Необходимо выполнить заявку до {{deadline}} включительно. <br></strong></p>
             <!-- <hr> -->
             <p><strong>Файлы заказчика:</strong></p>
             <div v-if="files.length > 0" class="highlight">
@@ -24,9 +24,11 @@
                     :key="file.id"
                     :file="file"
                     :idx = "idx"
+                    :hide = "true"
                     tag="ul"
                     ></file-preview>
-            </div><br>
+            </div>
+             <p><strong>Описание:&nbsp;</strong>{{description}}</p>
             <div class="form-control">
                 <label for="offer">Готов сделать за (укажите сумму в рублях):</label>
                 <input type="number"
@@ -36,7 +38,7 @@
                 >
             </div>
             <!-- +disabled || userLocalId == localId -->
-            <button class="btn danger" :disabled="offerAmount == '' || offerAmount == null || alreadyExist || localId == userLocalId" @click="take">Взять</button>
+            <button class="btn danger" :disabled="offerAmount == '' || offerAmount == null || alreadyExist || localId == userLocalId" @click="take">Откликнуться</button>
             <!-- <small v-if="offerAmount">за{{currency(offerAmount)}}</small> -->
         </app-page>
         <h3 v-else class="text-center text-white">
@@ -72,12 +74,20 @@
                                 </router-link>
                             </div>
                         </td>
-                        <td>{{r.rating.value}}/{{r.rating.count}}</td>
+                        <td class="stars">
+                            <star-rating
+                            :styleStarWidth = 24
+                            :styleStarHeight = 24
+                            :isIndicatorActive = false
+                            :value = r.rating.value
+                            :amount = r.rating.count>
+                        </star-rating>
+                        </td>
                         <td>{{currency(r.amount)}}</td>
                         <td v-if="r.localId == localId">
                         <button class="btn danger"
                         @click="detele"
-                        >Отказаться от заявки</button>
+                        >Отказаться</button>
                         </td>
                     </tr>
                 </tbody>
@@ -98,11 +108,11 @@ import AppLoader from '../components/ui/AppLoader'
 import AppStatus from '../components/ui/AppStatus.vue'
 import {currency} from '../utils/currency-formator'
 import filePreview from '@/components/dragNdrop/components/filePreview.vue'
-
+import StarRating from '../utils/star-rating.vue'
  
     export default {
         components: {
-            AppPage, AppLoader, AppStatus, filePreview
+            AppPage, AppLoader, AppStatus, filePreview, StarRating
         },
 
         setup() {
@@ -124,6 +134,7 @@ import filePreview from '@/components/dragNdrop/components/filePreview.vue'
             const localId = ref()
             const amount = ref()
             const deadline = ref()
+            const description = ref()
             const files = ref([])
             const executorsList = ref([])
             const offerAmount = ref()
@@ -145,6 +156,7 @@ import filePreview from '@/components/dragNdrop/components/filePreview.vue'
                 amount.value = request.value.amount
                 userName.value = request.value.userName
                 files.value = request.value.files
+                description.value = request.value.description
                 userLocalId.value = request.value.localId
                 request.value.executorsList ? executorsList.value = request.value.executorsList : executorsList.value = []
                 console.log("Завка", request.value);
@@ -188,7 +200,7 @@ import filePreview from '@/components/dragNdrop/components/filePreview.vue'
             }
 
 
-            return {loading, currency, take, status, amount, offerAmount, userName, request, files, userLocalId, localId, executorsList, alreadyExist, rating, detele, deadline
+            return {loading, currency, take, status, amount, offerAmount, userName, request, files, userLocalId, localId, executorsList, alreadyExist, rating, detele, deadline, description
             }
         }
     }

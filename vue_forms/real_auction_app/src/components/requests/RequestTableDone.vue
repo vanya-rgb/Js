@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 v-if="requests != 'undefind'" class="text-center">Заявок пока нет</h4>
+        <h4 v-if="requests.length == 0" class="text-center">Заявок пока нет</h4>
         <table v-else class="table"> 
             <thead>
                 <tr>
@@ -33,9 +33,13 @@
 <script>
 import {currency} from '../../utils/currency-formator'
 import AppStatus from '../ui/AppStatus.vue'
+import { onMounted } from 'vue'
     export default {
         props: ['requests'],
-        setup() {
+        setup(props) {
+            onMounted(async()=> {
+                console.log("!!!PRORS!!!", props.requests);
+            })
             return {currency}
         },
         components: {

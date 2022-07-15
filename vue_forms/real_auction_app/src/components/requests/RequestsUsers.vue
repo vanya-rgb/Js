@@ -18,7 +18,9 @@
             <!-- <label for="userName">Введите пиздюка</label> -->
             <input type="text" id="userName" v-model="input">
         </div>
-        <request-users-table :requests="requests" :input="input"></request-users-table>
+        <request-users-table
+        :requests="requests"
+        :input="input"></request-users-table>
         </div>
     </div>
 </template>

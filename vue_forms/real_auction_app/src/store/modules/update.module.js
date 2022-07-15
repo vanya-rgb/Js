@@ -30,18 +30,14 @@ export default {
         },
         async updateExeData({dispatch}, payload) {
             try {
-                console.log("PAYLOAD", payload.сomplited);
+                console.log("PAYLOAD", payload);
                 const washingtonRef = doc(db, "users", `${payload.localId}`);
-                await updateDoc(washingtonRef, {
-                    toComplite: payload.toComplite,
-                    сomplited: payload.сomplited,
-                    status: payload.status
-                }
-                );
-                dispatch('setMessage', {
-                    value: "Страница обновлена",
-                    type: 'primary'
-                }, {root: true})
+                await updateDoc(washingtonRef, payload);
+                
+                // dispatch('setMessage', {
+                //     value: "Страница обновлена",
+                //     type: 'primary'
+                // }, {root: true})
             } catch(e) {
                 console.log(e);
                 dispatch('setMessage', {

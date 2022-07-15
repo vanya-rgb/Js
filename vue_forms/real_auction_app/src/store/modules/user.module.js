@@ -29,7 +29,7 @@ export default {
         },
         async getUserData({dispatch}, payload) {
             try {
-                console.log('getUserData', payload);
+                // console.log('getUserData', payload);
                 const docRef = doc(db, "users", `${payload}`);
                 const docSnap = await getDoc(docRef)
 

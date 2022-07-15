@@ -3,21 +3,25 @@
         <app-loader v-if="loading"></app-loader>
         <div class="container" v-else>
             
-            <app-page title="Общая информация">
-                <div class="breadcrumbs">
-                    <router-link :to= "'/' + localId" class="text"><img :src="mainId+'arrow.png'" alt=""></router-link>
-                </div><br>
-            
-                <div class="form-control">
-                    <label for="displayName">Введите новый ник</label>
-                    <input type="text" id="displayName" v-model="displayName">
+            <div class="breadcrumbs">
+                    <router-link :to= "'/' + localId" class="text">На страницу</router-link>
                 </div>
+            <app-page title="Общая информация">
+
+                <form @submit.prevent="changeName">
+                <div :class="['form-control', {invalid: dError}]">
+                    <label for="displayName">Новый ник</label>
+                    <input type="text" id="displayName" v-model="displayName" @blur="dBlur">
+                    <small v-if="dError">{{dError}}</small>
+                </div>
+                <button class="btn" type="submit" @click="changeName">Сохранить</button><br><br><br>
+                </form>
             
                 <div class="form-control">
-                    <label for="number">Введите новый номер</label>
+                    <label for="number">Новый номер</label>
                     <input type="tel" v-mask="'#(###)-###-##-##'" v-model="number">
                 </div>
-                <button class="btn" @click="changeProfile">Сохранить</button><br><br><br>
+                <button class="btn" @click="changeNumber">Сохранить</button><br><br><br>
             
                 <form @submit.prevent="changeEmail">
                 <div :class="['form-control', {invalid: eError}]">
@@ -47,13 +51,16 @@
                 </form>
             </app-page>
             <button class="btn danger" @click="isModal = true">Удалить аккаунт</button>
-            <app-modal-min v-if="isModal" title="вы точно хотите удалить аккаунт?" @close = "isModal = false">
+            <app-modal v-if="isModal" title="вы точно хотите удалить аккаунт?"
+            class="center"
+            :height="'250px'"
+            @close = "isModal = false">
             <div>
                 <tr><img :src="mainId+'sadIcon.png'" alt=""></tr><br>
             <tr><button class="btn primary" @click="isModal = false">Остаться</button>
                 <button class="btn danger" @click="deleteApp">Удалить</button></tr>
             </div>
-            </app-modal-min>
+            </app-modal>
         </div>
     </div>
 </template>
@@ -68,11 +75,13 @@ import {useRouter, useRoute} from 'vue-router'
 import useEmailForm from '../use/email-form'
 import usePasswordForm from '../use/password-form'
 import {mask} from 'vue-the-mask'
-import AppModalMin from '../components/ui/AppModalMin'
+import AppModal from '../components/ui/AppModal'
+import * as yup from 'yup'
+import {useField, useForm} from 'vee-validate'
 
     export default {
         components: {
-            AppLoader, AppPage, AppModalMin
+            AppLoader, AppPage, AppModal
         },
         directives: {
             mask
@@ -83,7 +92,6 @@ import AppModalMin from '../components/ui/AppModalMin'
             const uploadPic = ref()
             const loading = ref(false)
             const userDb = ref({})
-            const displayName = ref()
             const number = ref()
             const localId = ref()
             //isValid
@@ -95,7 +103,8 @@ import AppModalMin from '../components/ui/AppModalMin'
 
             mainId.value = process.env.BASE_URL
             localId.value = route.params.localId
-            //загрузка фотки
+            
+            const {handleSubmit} = useForm()
             //заявки
             const requests = computed(()=> store.getters['request/requests']
                 .filter(request => {
@@ -114,7 +123,6 @@ import AppModalMin from '../components/ui/AppModalMin'
                 console.log("userDb",userDb.value);
 
                 console.log(userDbData);
-                displayName.value = userDbData.userName
                 number.value = userDbData.phone
                 localId.value = userDbData.localId
 
@@ -131,6 +139,11 @@ import AppModalMin from '../components/ui/AppModalMin'
                 //     })
             })
 
+            const {value: displayName, errorMessage: dError, handleBlur: dBlur} = useField(
+                'displayName',
+                yup.string().trim().max(30, 'Максимально 30 символов').matches(/^[a-zA-Z0-9]{0,38}$/i, {message: 'ну где вы видели такой ник!?'})
+            )
+
             const update = async(request) => {
                 //получили объект
                 console.log("UPDATE", request);
@@ -139,16 +152,27 @@ import AppModalMin from '../components/ui/AppModalMin'
                 await store.dispatch('request/update', data)
             }
 
-            const changeProfile = async() => {
+            const changeName = handleSubmit(async values =>{
                 loading.value = true
 
+                console.log("Values", values);
                 await store.dispatch('update/updateUserData', {
-                    phone: number.value,
-                    userName: displayName.value
+                    userName: values.displayName
                 })
 
                 requests.value.forEach(async(request) => {
                     await update(request)
+                })
+
+                router.push(`/${localId.value}`)
+            })
+
+            //изменение номера
+            const changeNumber = async() => {
+                loading.value = true
+
+                await store.dispatch('update/updateUserData', {
+                    phone: number.value,
                 })
 
                 router.push(`/${localId.value}`)
@@ -160,9 +184,8 @@ import AppModalMin from '../components/ui/AppModalMin'
 
             return {
                 isUpload, uploadPic, loading, number,
-                displayName, localId, ...useEmailForm(), ...usePasswordForm(), changeProfile, mainId, deleteApp, isModal
+                displayName, localId, ...useEmailForm(), ...usePasswordForm(), changeNumber, changeName, mainId, deleteApp, isModal, dError, dBlur
             }
         }
     }
 </script>
-

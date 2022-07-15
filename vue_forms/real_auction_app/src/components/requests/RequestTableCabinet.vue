@@ -20,17 +20,23 @@
                     <td>{{r.date}}</td>
                     <td><app-status :type="r.status"></app-status></td>
                     <td>
+                        
                         <div v-if="r.status == 'done'">
                             <router-link v-slot="{navigate}" custom :to="{name: 'RequestDone', params: {id: r.id}}">
                             <button class="btn" @click="navigate">Открыть</button>
-                        </router-link>
+                            </router-link>
+                        </div>
+                        <div v-else-if="r.status == 'on_inspection'">
+                            <router-link v-slot="{navigate}" custom :to="{name: 'OnInspection', params: {id: r.id}}">
+                            <button class="btn" @click="navigate">Открыть</button>
+                            </router-link>
                         </div>
                         <div v-else>
                         <router-link v-slot="{navigate}" custom :to="{name: 'RequestCabinet', params: {id: r.id}}">
                             <button class="btn" @click="navigate">Открыть</button>
                         </router-link>
                         </div>
-                        
+
                     </td>
                 </tr>
             </tbody>

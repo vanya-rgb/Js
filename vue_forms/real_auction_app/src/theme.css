@@ -178,6 +178,8 @@
     border-left-width: .3rem;
     border-left-style: solid;
     border-color: #3eaf7c;
+    max-height: 200px;
+    overflow-y: auto;
     /* border-radius: 6%; */
     /* background: linear-gradient(45deg, #EECFBA, #C5DDE8); */
 }
@@ -273,17 +275,18 @@ h6 {
     font-weight: 500;
     line-height: 1.45;
 }
-
+/* 
 h1 {
     font-size: 2.2rem;
     font-weight: 600;
-}
+} */
 
 h2 {
     font-size: 1.65rem;
     padding-bottom: 0.3rem;
     border-bottom: 1px solid #eaecef;
 }
+
 
 h3 {
     font-size: 1.35rem;
@@ -294,9 +297,17 @@ h3 {
      font-size: smaller;
 }
 
-/*.danger {*/
-/*    color: #e53935;*/
-/*} */
+.dirtyPrimary {
+    color: #37905d;
+}
+
+.warning {
+    color: #d0a30e;
+}
+
+.danger {
+    color: #e53935;
+}
 
 .btn {
     color: #42b983;
@@ -395,7 +406,7 @@ h3 {
     width: 100%;
     color: #2c3e50;
     padding: 0.5rem 1.5rem;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     font-size: 1rem;
     resize: none;
 }
@@ -533,7 +544,7 @@ h3 {
 .modal {
     position: fixed;
     top: 60px;
-    height: 600px;
+    /* height: 600px; */
     max-width: 700px;
     width: 60%;
     min-width: 400px;
@@ -547,29 +558,14 @@ h3 {
     overflow-y: auto;
 }
 
-.modal-min {
-    position: fixed;
-    top: 60px;
-    height: 250px;
-    text-align: center;
-    max-width: 700px;
-    width: 60%;
-    min-width: 400px;
-    padding: 1rem;
-    background: #fff;
-    z-index: 1000;
-    left: 50%;
-    border-radius: 10px;
-    transform: translateX(-50%);
-    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
-}
 
-.modal-min tr {
+.center {
+    text-align: center;
     display: table;
     margin: 0 auto;
 }
 
-.center {
+.center tr {
     display: table;
     margin: 0 auto;
 }
@@ -649,6 +645,10 @@ h3 {
     }
 }
 
+.margin-left {
+    margin-left: 1rem;
+}
+
 .navbar {
     display: flex;
     padding: 0 2rem;
@@ -667,7 +667,7 @@ h3 {
 
 .navbar-menu {
     list-style: none;
-    display: flex;
+    display: inline-flex;
 }
 
 .navbar-menu li {
@@ -807,6 +807,12 @@ html {
     justify-content: center;
 }
 
+.commentsColl {
+    vertical-align: top;
+    text-align: center;
+    width: 50%;
+}
+
 .left-col li {
     padding-bottom: 1rem;
 }
@@ -847,6 +853,7 @@ html {
 
 .table {
     text-align: center;
+    overflow: auto;
 }
 
 .table.min {
@@ -874,7 +881,7 @@ html {
 }
 
 .table td {
-    padding: .5rem 1vw;
+    padding: .5rem;
 }
 
 

@@ -95,6 +95,15 @@ const routes = [
     }
   },
   {
+    path: '/onInspection/:id',
+    name: 'OnInspection',
+    component: () => import('../views/OnInspection.vue'),
+    meta: {
+      layout: 'main',
+      auth: true
+    }
+  },
+  {
     path: '/reg',
     name: 'Registration',
     component: () => import('../views/RegistrationPage.vue'),

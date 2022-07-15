@@ -12,7 +12,7 @@ import {ref, watch} from 'vue'
                 type: String,
                 required: true,
                 validator(value) {
-                    return ['active', 'in_progress', 'done', 'pending'].includes(value)
+                    return ['active', 'in_progress', 'done', 'pending', 'on_inspection'].includes(value)
                 }
             }
         },

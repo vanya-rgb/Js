@@ -30,7 +30,7 @@
         <div class="form-control">
             <label for="file-input" class="upload-container label form-control">Выберите (или перетищите) файл</label>
             <span>.jpg, .jpeg, .png, .docx, .doc, .pdf, .xlsx, .pptx</span><br>
-            <span>размер файла не должен превышать 3 МБ</span>
+            <span>размер файла не должен превышать 3 МБ</span><br>
             <small v-if="message">{{message}}</small>
             <drop-zone class="wrapperList uploadBorder" @files-dropped="onDrop">
                 <input

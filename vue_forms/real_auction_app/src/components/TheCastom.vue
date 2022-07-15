@@ -3,10 +3,10 @@
         <ul class="navbar-menu">
             <li class="content" @click="$emit('createReq')">Создать заявку</li>
             <li class="content" @click="$emit('findUser')">Найти челика</li>
-            <li class="content">
-                <router-link :to="{name: 'Edit', params: {localId}}">Редактировать профиль</router-link>
-            </li>
         </ul>
+        <router-link :to="{name: 'Edit', params: {localId}}">
+                    <font-awesome-icon icon="fa-solid fa-gears" id="icon" size="2x"/>
+        </router-link>
     </div>
 </template>
 
@@ -17,6 +17,14 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+
+#icon:hover {
+    color: #3eaf7c;
+}
+
+a {
+    color: unset;
+}
 
 </style>

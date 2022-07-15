@@ -1,22 +1,24 @@
 <template>
-    <tr class="align-left vertical-align" v-if="isVerify">
-        <th>Email:</th>
+<div>
+    <tr class="align-left display" v-if="isVerify">
+        <th>Email&nbsp;<img src="greenMark.png" alt=""></th>
         <td>{{email}}</td>
-        <td>
-            <img src="greenMark.png" alt="">
-        </td>
     </tr>
-    <tr class="align-left vertical-align" v-else>
+    <tr class="align-left display" v-else>
 
-        <th>Email:</th>
-        <td>{{email}}</td>
+        <th>Email</th>
+        <td class="margin-bottom">{{email}}</td>
         <td v-if="!isSend">
-            <img src="redMark.png" alt="" @click="sendEmail">
+            <!-- <img src="redMark.png" alt="" @click="sendEmail"> -->
+            <div class="badge danger cursor localLong"
+            @click="sendEmail"
+            >Подтвердить Email</div>
         </td>
-        <td class="file-preview" v-else>
-            <div class="badge danger cursor">{{currentTime}} сек.</div>
+        <td class="" v-else>
+            <div class="badge danger cursor local">{{currentTime}} сек.</div>
         </td>
     </tr>
+</div>
 </template>
 
 <script>
@@ -72,6 +74,22 @@ import { useStore } from "vuex"
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.display {
+    display: inline-grid;
+}
+.localLong {
+    width: 150px;
+    text-align: center;
+}
+
+.local {
+    width: 80px;
+    text-align: center;
+}
+
+.margin-bottom {
+    margin-bottom: 5px;
+}
 
 </style>
